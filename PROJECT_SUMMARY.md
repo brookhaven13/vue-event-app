@@ -164,8 +164,7 @@ npm run test:unit
 本前端應用已完全配置好與您的 Go REST API 後端對接：
 
 ### API 端點配置
-- **生產環境 URL**: `https://brookhaven.dev/api/v1`
-- **本地開發 URL**: `http://localhost:8080/api/v1` (可選)
+- **本地開發 URL**: `http://localhost:8080/api/v1`
 - **認證**: Bearer Token (JWT)
 - **自動錯誤處理**: 401 錯誤時自動登出並重定向
 
@@ -177,9 +176,6 @@ npm run test:unit
 3. **動態配置**: API URL 會自動從環境變數中讀取
 
 ```bash
-# .env (生產環境)
-VITE_API_BASE_URL=https://brookhaven.dev/api/v1
-
 # .env.local (開發環境，可選)
 VITE_API_BASE_URL=http://localhost:8080/api/v1
 ````
