@@ -5,7 +5,7 @@
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">註冊新帳戶</h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           或者
-          <router-link to="/login" class="font-medium text-indigo-600 hover:text-indigo-500">
+          <router-link to="login" class="font-medium text-indigo-600 hover:text-indigo-500">
             登入現有帳戶
           </router-link>
         </p>
@@ -202,7 +202,7 @@ const handleRegister = async () => {
     })
 
     // 註冊成功後導向首頁
-    router.push('/')
+    router.push('events')
   } catch (error) {
     // 錯誤已經在 store 中處理
     console.error('Register failed:', error)

@@ -35,7 +35,7 @@
           <ul class="space-y-2">
             <li>
               <router-link
-                to="/events"
+                to="events"
                 class="text-gray-600 hover:text-indigo-600 text-sm transition-colors"
               >
                 瀏覽活動
@@ -43,7 +43,7 @@
             </li>
             <li v-if="authStore.isAuthenticated">
               <router-link
-                to="/dashboard"
+                to="dashboard"
                 class="text-gray-600 hover:text-indigo-600 text-sm transition-colors"
               >
                 我的儀表板
@@ -51,7 +51,7 @@
             </li>
             <li v-if="authStore.isAuthenticated">
               <router-link
-                to="/events/create"
+                to="events/create"
                 class="text-gray-600 hover:text-indigo-600 text-sm transition-colors"
               >
                 建立活動
@@ -59,7 +59,7 @@
             </li>
             <li v-if="!authStore.isAuthenticated">
               <router-link
-                to="/login"
+                to="login"
                 class="text-gray-600 hover:text-indigo-600 text-sm transition-colors"
               >
                 登入
@@ -67,7 +67,7 @@
             </li>
             <li v-if="!authStore.isAuthenticated">
               <router-link
-                to="/register"
+                to="register"
                 class="text-gray-600 hover:text-indigo-600 text-sm transition-colors"
               >
                 註冊

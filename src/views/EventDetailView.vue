@@ -239,7 +239,7 @@ const handleDeleteEvent = async () => {
   try {
     await eventStore.deleteEvent(eventId.value)
     deleteDialog.value = false
-    router.push('/events')
+    router.push('events')
   } catch (error) {
     console.error('Failed to delete event:', error)
   }

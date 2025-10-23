@@ -5,7 +5,7 @@
       <h1 class="text-3xl font-bold text-gray-900">活動列表</h1>
       <Button
         v-if="authStore.isAuthenticated"
-        @click="$router.push('/events/create')"
+        @click="$router.push('events/create')"
         class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md"
       >
         <i class="pi pi-plus mr-2"></i>
@@ -31,7 +31,7 @@
       <div class="text-gray-500 text-lg mb-4">目前沒有任何活動</div>
       <Button
         v-if="authStore.isAuthenticated"
-        @click="$router.push('/events/create')"
+        @click="$router.push('events/create')"
         class="bg-indigo-600 hover:bg-indigo-700 text-white"
       >
         建立第一個活動

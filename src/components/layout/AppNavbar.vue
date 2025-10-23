@@ -4,7 +4,7 @@
       <div class="flex justify-between items-center h-16">
         <!-- Logo 和品牌名稱 -->
         <div class="flex items-center">
-          <router-link to="/" class="flex items-center space-x-2">
+          <router-link to="events" class="flex items-center space-x-2">
             <i class="pi pi-calendar text-2xl text-indigo-600"></i>
             <span class="text-xl font-bold text-gray-900">EventApp</span>
           </router-link>
@@ -14,7 +14,7 @@
         <div class="hidden md:block">
           <div class="flex items-center space-x-8">
             <router-link
-              to="/events"
+              to="events"
               class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               :class="{ 'text-indigo-600 bg-indigo-50': $route.path.startsWith('/events') }"
             >
@@ -23,7 +23,7 @@
 
             <template v-if="authStore.isAuthenticated">
               <router-link
-                to="/dashboard"
+                to="dashboard"
                 class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 :class="{ 'text-indigo-600 bg-indigo-50': $route.path === '/dashboard' }"
               >
@@ -31,7 +31,7 @@
               </router-link>
 
               <router-link
-                to="/events/create"
+                to="events/create"
                 class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 建立活動
@@ -59,13 +59,13 @@
 
           <!-- 未登入用戶 -->
           <div v-else class="flex items-center space-x-3">
-            <router-link to="/login">
+            <router-link to="login">
               <Button
                 label="登入"
                 class="p-button-outlined text-indigo-600 border-indigo-600 hover:bg-indigo-50"
               />
             </router-link>
-            <router-link to="/register">
+            <router-link to="register">
               <Button label="註冊" class="bg-indigo-600 hover:bg-indigo-700 text-white" />
             </router-link>
           </div>
@@ -83,7 +83,7 @@
       <div v-show="isMobileMenuOpen" class="md:hidden border-t border-gray-200">
         <div class="px-2 pt-2 pb-3 space-y-1 bg-gray-50">
           <router-link
-            to="/events"
+            to="events"
             @click="isMobileMenuOpen = false"
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-white transition-colors"
           >
@@ -92,7 +92,7 @@
 
           <template v-if="authStore.isAuthenticated">
             <router-link
-              to="/dashboard"
+              to="dashboard"
               @click="isMobileMenuOpen = false"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-white transition-colors"
             >
@@ -100,7 +100,7 @@
             </router-link>
 
             <router-link
-              to="/events/create"
+              to="events/create"
               @click="isMobileMenuOpen = false"
               class="block px-3 py-2 rounded-md text-base font-medium text-indigo-600 bg-white"
             >
@@ -120,14 +120,14 @@
           <template v-else>
             <div class="border-t border-gray-200 pt-2 space-y-1">
               <router-link
-                to="/login"
+                to="login"
                 @click="isMobileMenuOpen = false"
                 class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-white transition-colors"
               >
                 登入
               </router-link>
               <router-link
-                to="/register"
+                to="register"
                 @click="isMobileMenuOpen = false"
                 class="block px-3 py-2 rounded-md text-base font-medium text-indigo-600 bg-white"
               >

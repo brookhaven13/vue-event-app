@@ -54,13 +54,13 @@
         <template #content>
           <div class="flex flex-wrap gap-4">
             <Button
-              @click="$router.push('/events/create')"
+              @click="$router.push('events/create')"
               icon="pi pi-plus"
               label="建立新活動"
               class="bg-indigo-600 hover:bg-indigo-700"
             />
             <Button
-              @click="$router.push('/events')"
+              @click="$router.push('events')"
               icon="pi pi-list"
               label="瀏覽所有活動"
               class="p-button-outlined"
@@ -77,7 +77,7 @@
             <div class="flex justify-between items-center">
               <span class="text-lg font-semibold">我主辦的活動</span>
               <Button
-                @click="$router.push('/events/create')"
+                @click="$router.push('events/create')"
                 icon="pi pi-plus"
                 class="p-button-text p-button-sm"
                 size="small"
@@ -134,7 +134,7 @@
             <div class="flex justify-between items-center">
               <span class="text-lg font-semibold">我參與的活動</span>
               <Button
-                @click="$router.push('/events')"
+                @click="$router.push('events')"
                 icon="pi pi-search"
                 class="p-button-text p-button-sm"
                 size="small"
