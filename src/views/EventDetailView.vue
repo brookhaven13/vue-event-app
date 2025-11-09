@@ -26,7 +26,7 @@
       <!-- 事件標題和操作按鈕 -->
       <div class="flex justify-between items-start mb-6">
         <div>
-          <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ event.title }}</h1>
+          <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ event.name }}</h1>
           <div class="flex items-center text-gray-600">
             <i class="pi pi-user mr-2"></i>
             <span>主辦者: {{ event.organizer?.name || '未知' }}</span>
@@ -52,7 +52,7 @@
           <Card class="mb-6">
             <template #header>
               <div
-                class="h-64 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
+                class="h-64 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center rounded-tl-lg rounded-tr-lg"
               >
                 <i class="pi pi-calendar text-white text-8xl"></i>
               </div>
@@ -161,7 +161,7 @@
 
     <!-- 刪除確認對話框 -->
     <Dialog v-model:visible="deleteDialog" header="確認刪除" :modal="true" class="w-96">
-      <p class="mb-4">您確定要刪除活動 "{{ event?.title }}" 嗎？此操作無法復原。</p>
+      <p class="mb-4">您確定要刪除活動 "{{ event?.name }}" 嗎？此操作無法復原。</p>
       <template #footer>
         <Button label="取消" @click="deleteDialog = false" class="p-button-text" />
         <Button

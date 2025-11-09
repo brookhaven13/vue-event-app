@@ -4,7 +4,7 @@
       <div class="flex justify-between items-center h-16">
         <!-- Logo 和品牌名稱 -->
         <div class="flex items-center">
-          <router-link to="events" class="flex items-center space-x-2">
+          <router-link to="/events" class="flex items-center space-x-2">
             <i class="pi pi-calendar text-2xl text-indigo-600"></i>
             <span class="text-xl font-bold text-gray-900">EventApp</span>
           </router-link>
@@ -14,7 +14,7 @@
         <div class="hidden md:block">
           <div class="flex items-center space-x-8">
             <router-link
-              to="events"
+              to="/events"
               class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               :class="{ 'text-indigo-600 bg-indigo-50': $route.path.startsWith('/events') }"
             >
@@ -23,18 +23,11 @@
 
             <template v-if="authStore.isAuthenticated">
               <router-link
-                to="dashboard"
+                to="/dashboard"
                 class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 :class="{ 'text-indigo-600 bg-indigo-50': $route.path === '/dashboard' }"
               >
                 我的儀表板
-              </router-link>
-
-              <router-link
-                to="events/create"
-                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                建立活動
               </router-link>
             </template>
           </div>
@@ -59,15 +52,18 @@
 
           <!-- 未登入用戶 -->
           <div v-else class="flex items-center space-x-3">
-            <router-link to="login">
-              <Button
-                label="登入"
-                class="p-button-outlined text-indigo-600 border-indigo-600 hover:bg-indigo-50"
-              />
-            </router-link>
-            <router-link to="register">
-              <Button label="註冊" class="bg-indigo-600 hover:bg-indigo-700 text-white" />
-            </router-link>
+            <router-link
+              to="/login"
+              class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              :class="{ 'text-indigo-600 bg-indigo-50': $route.path === '/login' }"
+              >登入</router-link
+            >
+            <router-link
+              to="/register"
+              class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              :class="{ 'text-indigo-600 bg-indigo-50': $route.path === '/register' }"
+              >註冊</router-link
+            >
           </div>
 
           <!-- 手機版菜單按鈕 -->
@@ -83,7 +79,7 @@
       <div v-show="isMobileMenuOpen" class="md:hidden border-t border-gray-200">
         <div class="px-2 pt-2 pb-3 space-y-1 bg-gray-50">
           <router-link
-            to="events"
+            to="/events"
             @click="isMobileMenuOpen = false"
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-white transition-colors"
           >

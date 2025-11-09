@@ -57,9 +57,18 @@ export const useEventStore = defineStore('event', () => {
     isLoading.value = true
     error.value = null
 
+    // 強制組合正確格式
+    const payload = {
+      owner_id: eventData.owner_id,
+      name: eventData.name,
+      description: eventData.description,
+      date: eventData.date,
+      location: eventData.location,
+    }
+
     try {
-      const response = await apiClient.createEvent(eventData)
-      events.value.push(response)
+      const response = await apiClient.createEvent(payload)
+      console.log('DEBUG createdEvent', response)
       return response
     } catch (err: unknown) {
       const message = (err as ApiError)?.response?.data?.message || '創建事件失敗'

@@ -64,18 +64,19 @@ class ApiClient {
 
   // 事件相關 API
   async getEvents(): Promise<Event[]> {
-    const response: AxiosResponse<ApiResponse<Event[]>> = await this.client.get('/events')
-    return response.data.data || []
+    const response = await this.client.get<Event[]>('/events')
+    return response.data
   }
 
   async getEvent(id: number): Promise<Event> {
-    const response: AxiosResponse<ApiResponse<Event>> = await this.client.get(`/events/${id}`)
-    return response.data.data!
+    const response = await this.client.get<Event>(`/events/${id}`)
+    return response.data
   }
 
   async createEvent(eventData: CreateEventRequest): Promise<Event> {
-    const response: AxiosResponse<ApiResponse<Event>> = await this.client.post('/events', eventData)
-    return response.data.data!
+    console.log('API BODY', eventData)
+    const response = await this.client.post('/events', eventData)
+    return response.data
   }
 
   async updateEvent(id: number, eventData: UpdateEventRequest): Promise<Event> {

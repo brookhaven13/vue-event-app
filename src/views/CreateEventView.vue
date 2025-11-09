@@ -26,7 +26,7 @@
               </label>
               <InputText
                 id="title"
-                v-model="form.title"
+                v-model="form.name"
                 placeholder="請輸入活動標題"
                 class="w-full"
                 :class="{ 'p-invalid': titleError }"
@@ -121,6 +121,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEventStore } from '@/stores/event'
+import { useAuthStore } from '@/stores/auth'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -129,17 +130,18 @@ import Calendar from 'primevue/calendar'
 
 const router = useRouter()
 const eventStore = useEventStore()
+const authStore = useAuthStore()
 
 const form = ref({
-  title: '',
+  name: '',
   description: '',
   date: null as Date | null,
   location: '',
 })
 
 const titleError = computed(() => {
-  if (!form.value.title) return ''
-  return form.value.title.length < 3 ? '標題至少需要 3 個字符' : ''
+  if (!form.value.name) return ''
+  return form.value.name.length < 3 ? '標題至少需要 3 個字符' : ''
 })
 
 const descriptionError = computed(() => {
@@ -160,7 +162,7 @@ const locationError = computed(() => {
 
 const isFormValid = computed(() => {
   return (
-    form.value.title &&
+    form.value.name &&
     form.value.description &&
     form.value.date &&
     form.value.location &&
@@ -181,15 +183,20 @@ const handleCreateEvent = async () => {
   }
 
   try {
+    if (!authStore.user) {
+      eventStore.error = '使用者未登入，無法建立活動'
+      return
+    }
     const eventData = {
-      title: form.value.title,
+      owner_id: authStore.user.id,
+      name: form.value.name,
       description: form.value.description,
       date: form.value.date!.toISOString(),
       location: form.value.location,
     }
 
     const createdEvent = await eventStore.createEvent(eventData)
-
+    console.log('DEBUG createdEvent', createdEvent)
     // 建立成功後導向事件詳情頁面
     router.push(`/events/${createdEvent.id}`)
   } catch (error) {

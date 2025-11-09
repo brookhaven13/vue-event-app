@@ -7,7 +7,7 @@ export interface User {
 
 export interface Event {
   id: number
-  title: string
+  name: string
   description: string
   date: string
   location: string
@@ -19,14 +19,15 @@ export interface Event {
 }
 
 export interface CreateEventRequest {
-  title: string
+  owner_id: number
+  name: string
   description: string
   date: string
   location: string
 }
 
 export interface UpdateEventRequest {
-  title?: string
+  name?: string
   description?: string
   date?: string
   location?: string

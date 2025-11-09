@@ -50,7 +50,7 @@
               <div class="mb-4">
                 <label class="block mb-1 font-medium">標題</label>
                 <input
-                  v-model="createForm.title"
+                  v-model="createForm.name"
                   type="text"
                   class="w-full border rounded px-2 py-1"
                   required
@@ -101,18 +101,18 @@
           <Card
             v-for="event in myEvents"
             :key="event.id"
-            class="event-card cursor-pointer transform transition-transform hover:scale-105"
+            class="event-card rounded-lg cursor-pointer transform transition-transform hover:scale-105"
             @click="goToEventDetail(event.id)"
           >
             <template #header>
               <div
-                class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
+                class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center rounded-t-lg"
               >
                 <i class="pi pi-calendar text-white text-6xl"></i>
               </div>
             </template>
             <template #title>
-              <div class="text-xl font-semibold text-gray-900 truncate">{{ event.title }}</div>
+              <div class="text-xl font-semibold text-gray-900 truncate">{{ event.name }}</div>
             </template>
             <template #content>
               <div class="space-y-3">
@@ -163,18 +163,18 @@
         <Card
           v-for="event in otherEvents"
           :key="event.id"
-          class="event-card cursor-pointer transform transition-transform hover:scale-105"
+          class="event-card rounded-lg cursor-pointer transform transition-transform hover:scale-105"
           @click="goToEventDetail(event.id)"
         >
           <template #header>
             <div
-              class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
+              class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center rounded-t-lg"
             >
               <i class="pi pi-calendar text-white text-6xl"></i>
             </div>
           </template>
           <template #title>
-            <div class="text-xl font-semibold text-gray-900 truncate">{{ event.title }}</div>
+            <div class="text-xl font-semibold text-gray-900 truncate">{{ event.name }}</div>
           </template>
           <template #content>
             <div class="space-y-3">
@@ -238,7 +238,7 @@
 import { ref, onMounted, computed, reactive } from 'vue'
 const showCreateDialog = ref(false)
 const createForm = reactive({
-  title: '',
+  name: '',
   description: '',
   date: '',
   location: '',
@@ -246,15 +246,36 @@ const createForm = reactive({
 
 const handleCreateEvent = async () => {
   try {
+    let user = authStore.user
+    if (!user) {
+      const savedUser = localStorage.getItem('user')
+      if (savedUser && savedUser !== 'undefined') {
+        try {
+          user = JSON.parse(savedUser)
+        } catch {
+          user = null
+        }
+      }
+    }
+    if (!user || !user.id) {
+      window.location.href = '/login'
+      return
+    }
+    const ownerId = user.id
+    const name = createForm.name || ''
+
+    console.log('DEBUG ownerId', ownerId)
+    console.log('DEBUG name', name)
     await eventStore.createEvent({
-      title: createForm.title,
+      owner_id: ownerId,
+      name,
       description: createForm.description,
       date: createForm.date,
       location: createForm.location,
     })
     showCreateDialog.value = false
     // 清空表單
-    createForm.title = ''
+    createForm.name = ''
     createForm.description = ''
     createForm.date = ''
     createForm.location = ''
@@ -262,6 +283,7 @@ const handleCreateEvent = async () => {
     await loadEvents()
   } catch (error) {
     // 可根據 eventStore.error 顯示錯誤
+    console.error('Failed to create event:', error)
   }
 }
 import { useRouter } from 'vue-router'
@@ -282,6 +304,7 @@ const deleteDialog = ref(false)
 const eventToDelete = ref<Event | null>(null)
 
 onMounted(() => {
+  authStore.initAuth()
   loadEvents()
 })
 
