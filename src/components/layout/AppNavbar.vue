@@ -52,7 +52,7 @@
               <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
                 <i class="pi pi-user text-white text-sm"></i>
               </div>
-              <span class="hidden sm:block text-gray-700">{{ authStore.user?.username }}</span>
+              <span class="hidden sm:block text-gray-700">{{ authStore.user?.name }}</span>
               <i class="pi pi-chevron-down text-gray-500 text-xs"></i>
             </Button>
           </div>

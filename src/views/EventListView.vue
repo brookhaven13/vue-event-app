@@ -78,7 +78,7 @@
 
             <div class="flex items-center text-sm text-gray-500">
               <i class="pi pi-user mr-2"></i>
-              主辦者: {{ event.organizer?.username || '未知' }}
+              主辦者: {{ event.organizer?.name || '未知' }}
             </div>
 
             <div v-if="event.attendees" class="flex items-center text-sm text-gray-500">

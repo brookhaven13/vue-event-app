@@ -16,22 +16,22 @@
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 space-y-6">
           <!-- 用戶名輸入框 -->
           <div class="space-y-2">
-            <label for="username" class="block text-sm font-medium text-gray-700">用戶名</label>
+            <label for="name" class="block text-sm font-medium text-gray-700">姓名</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="pi pi-user text-gray-400"></i>
               </div>
               <InputText
-                id="username"
-                v-model="form.username"
+                id="name"
+                v-model="form.name"
                 type="text"
-                placeholder="請輸入用戶名"
+                placeholder="請輸入姓名"
                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                :class="{ 'border-red-300 focus:ring-red-500 focus:border-red-500': usernameError }"
+                :class="{ 'border-red-300 focus:ring-red-500 focus:border-red-500': nameError }"
                 required
               />
             </div>
-            <small v-if="usernameError" class="text-red-600 text-sm">{{ usernameError }}</small>
+            <small v-if="nameError" class="text-red-600 text-sm">{{ nameError }}</small>
           </div>
 
           <!-- 電子郵件輸入框 -->
@@ -145,15 +145,15 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const form = ref({
-  username: '',
+  name: '',
   email: '',
   password: '',
   confirmPassword: '',
 })
 
-const usernameError = computed(() => {
-  if (!form.value.username) return ''
-  return form.value.username.length < 3 ? '用戶名至少需要 3 個字符' : ''
+const nameError = computed(() => {
+  if (!form.value.name) return ''
+  return form.value.name.length < 2 ? '姓名至少需要 2 個字符' : ''
 })
 
 const emailError = computed(() => {
@@ -174,11 +174,11 @@ const confirmPasswordError = computed(() => {
 
 const isFormValid = computed(() => {
   return (
-    form.value.username &&
+    form.value.name &&
     form.value.email &&
     form.value.password &&
     form.value.confirmPassword &&
-    !usernameError.value &&
+    !nameError.value &&
     !emailError.value &&
     !passwordError.value &&
     !confirmPasswordError.value
@@ -196,7 +196,7 @@ const handleRegister = async () => {
 
   try {
     await authStore.register({
-      username: form.value.username,
+      name: form.value.name,
       email: form.value.email,
       password: form.value.password,
     })

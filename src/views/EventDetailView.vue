@@ -29,7 +29,8 @@
           <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ event.title }}</h1>
           <div class="flex items-center text-gray-600">
             <i class="pi pi-user mr-2"></i>
-            <span>主辦者: {{ event.organizer?.username || '未知' }}</span>
+            <span>主辦者: {{ event.organizer?.name || '未知' }}</span>
+            <span>主辦者: {{ event.organizer?.name || '未知' }}</span>
           </div>
         </div>
 
@@ -147,7 +148,7 @@
                     <i class="pi pi-user text-white text-sm"></i>
                   </div>
                   <div>
-                    <div class="font-medium text-gray-900">{{ attendee.username }}</div>
+                    <div class="font-medium text-gray-900">{{ attendee.name }}</div>
                     <div class="text-sm text-gray-600">{{ attendee.email }}</div>
                   </div>
                 </div>

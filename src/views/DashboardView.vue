@@ -4,7 +4,7 @@
       <!-- 頁面標題 -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">我的儀表板</h1>
-        <p class="text-gray-600 mt-2">歡迎回來，{{ authStore.user?.username }}！</p>
+        <p class="text-gray-600 mt-2">歡迎回來，{{ authStore.user?.name }}！</p>
       </div>
 
       <!-- 統計卡片 -->
@@ -172,7 +172,7 @@
                         {{ formatDate(event.date) }}
                       </div>
                       <div class="text-right">
-                        <div>主辦: {{ event.organizer?.username }}</div>
+                        <div>主辦: {{ event.organizer?.name }}</div>
                       </div>
                     </div>
                   </div>
