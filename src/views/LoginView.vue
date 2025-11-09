@@ -126,8 +126,8 @@ const handleLogin = async () => {
       password: form.value.password,
     })
 
-    // 登入成功後導向首頁
-    router.push('events')
+    // 登入成功後導向 event 頁面
+    router.push('/events')
   } catch (error) {
     // 錯誤已經在 store 中處理
     console.error('Login failed:', error)

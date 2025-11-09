@@ -3,14 +3,6 @@
     <!-- 頁面標題和操作按鈕 -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-3xl font-bold text-gray-900">活動列表</h1>
-      <Button
-        v-if="authStore.isAuthenticated"
-        @click="$router.push('events/create')"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md"
-      >
-        <i class="pi pi-plus mr-2"></i>
-        建立活動
-      </Button>
     </div>
 
     <!-- 載入狀態 -->
@@ -38,79 +30,192 @@
       </Button>
     </div>
 
-    <!-- 活動列表 -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Card
-        v-for="event in eventStore.events"
-        :key="event.id"
-        class="event-card cursor-pointer transform transition-transform hover:scale-105"
-        @click="goToEventDetail(event.id)"
-      >
-        <template #header>
-          <div
-            class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
+    <!-- 活動列表顯示邏輯 -->
+    <div v-else>
+      <!-- 登入者的活動 -->
+      <div v-if="authStore.isAuthenticated && myEvents.length > 0">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-xl font-bold text-indigo-700">我的活動</h2>
+          <Button
+            icon="pi pi-plus"
+            label="建立活動"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md"
+            @click="showCreateDialog = true"
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <!-- 建立活動 Dialog -->
+          <Dialog v-model:visible="showCreateDialog" header="建立新活動" :modal="true" class="w-96">
+            <form @submit.prevent="handleCreateEvent">
+              <div class="mb-4">
+                <label class="block mb-1 font-medium">標題</label>
+                <input
+                  v-model="createForm.title"
+                  type="text"
+                  class="w-full border rounded px-2 py-1"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="block mb-1 font-medium">描述</label>
+                <textarea
+                  v-model="createForm.description"
+                  class="w-full border rounded px-2 py-1"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-4">
+                <label class="block mb-1 font-medium">日期</label>
+                <input
+                  v-model="createForm.date"
+                  type="datetime-local"
+                  class="w-full border rounded px-2 py-1"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="block mb-1 font-medium">地點</label>
+                <input
+                  v-model="createForm.location"
+                  type="text"
+                  class="w-full border rounded px-2 py-1"
+                  required
+                />
+              </div>
+              <div class="flex justify-end gap-2">
+                <Button
+                  label="取消"
+                  @click="showCreateDialog = false"
+                  class="p-button-text"
+                  type="button"
+                />
+                <Button
+                  label="建立"
+                  type="submit"
+                  class="bg-indigo-600 text-white"
+                  :loading="eventStore.isLoading"
+                />
+              </div>
+            </form>
+          </Dialog>
+          <Card
+            v-for="event in myEvents"
+            :key="event.id"
+            class="event-card cursor-pointer transform transition-transform hover:scale-105"
+            @click="goToEventDetail(event.id)"
           >
-            <i class="pi pi-calendar text-white text-6xl"></i>
-          </div>
-        </template>
-
-        <template #title>
-          <div class="text-xl font-semibold text-gray-900 truncate">
-            {{ event.title }}
-          </div>
-        </template>
-
-        <template #content>
-          <div class="space-y-3">
-            <p class="text-gray-600 line-clamp-3">
-              {{ event.description }}
-            </p>
-
-            <div class="flex items-center text-sm text-gray-500">
-              <i class="pi pi-calendar mr-2"></i>
-              {{ formatDate(event.date) }}
+            <template #header>
+              <div
+                class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
+              >
+                <i class="pi pi-calendar text-white text-6xl"></i>
+              </div>
+            </template>
+            <template #title>
+              <div class="text-xl font-semibold text-gray-900 truncate">{{ event.title }}</div>
+            </template>
+            <template #content>
+              <div class="space-y-3">
+                <p class="text-gray-600 line-clamp-3">{{ event.description }}</p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <i class="pi pi-calendar mr-2"></i>{{ formatDate(event.date) }}
+                </div>
+                <div class="flex items-center text-sm text-gray-500">
+                  <i class="pi pi-map-marker mr-2"></i>{{ event.location }}
+                </div>
+                <div class="flex items-center text-sm text-gray-500">
+                  <i class="pi pi-user mr-2"></i>主辦者: {{ event.organizer?.name || '未知' }}
+                </div>
+                <div v-if="event.attendees" class="flex items-center text-sm text-gray-500">
+                  <i class="pi pi-users mr-2"></i>參與者: {{ event.attendees.length }} 人
+                </div>
+              </div>
+            </template>
+            <template #footer>
+              <div class="flex justify-between items-center">
+                <Button @click.stop="goToEventDetail(event.id)" class="p-button-text" size="small"
+                  >查看詳情</Button
+                >
+                <div v-if="canEditEvent(event)" class="flex space-x-2">
+                  <Button
+                    @click.stop="editEvent(event.id)"
+                    icon="pi pi-pencil"
+                    class="p-button-text p-button-sm"
+                    size="small"
+                  />
+                  <Button
+                    @click.stop="confirmDeleteEvent(event)"
+                    icon="pi pi-trash"
+                    class="p-button-text p-button-danger p-button-sm"
+                    size="small"
+                  />
+                </div>
+              </div>
+            </template>
+          </Card>
+        </div>
+      </div>
+      <!-- 所有活動（未登入或非個人活動） -->
+      <h2 v-if="authStore.isAuthenticated" class="text-xl font-bold mb-2 text-gray-700">
+        所有活動
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card
+          v-for="event in otherEvents"
+          :key="event.id"
+          class="event-card cursor-pointer transform transition-transform hover:scale-105"
+          @click="goToEventDetail(event.id)"
+        >
+          <template #header>
+            <div
+              class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
+            >
+              <i class="pi pi-calendar text-white text-6xl"></i>
             </div>
-
-            <div class="flex items-center text-sm text-gray-500">
-              <i class="pi pi-map-marker mr-2"></i>
-              {{ event.location }}
+          </template>
+          <template #title>
+            <div class="text-xl font-semibold text-gray-900 truncate">{{ event.title }}</div>
+          </template>
+          <template #content>
+            <div class="space-y-3">
+              <p class="text-gray-600 line-clamp-3">{{ event.description }}</p>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="pi pi-calendar mr-2"></i>{{ formatDate(event.date) }}
+              </div>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="pi pi-map-marker mr-2"></i>{{ event.location }}
+              </div>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="pi pi-user mr-2"></i>主辦者: {{ event.organizer?.name || '未知' }}
+              </div>
+              <div v-if="event.attendees" class="flex items-center text-sm text-gray-500">
+                <i class="pi pi-users mr-2"></i>參與者: {{ event.attendees.length }} 人
+              </div>
             </div>
-
-            <div class="flex items-center text-sm text-gray-500">
-              <i class="pi pi-user mr-2"></i>
-              主辦者: {{ event.organizer?.name || '未知' }}
+          </template>
+          <template #footer>
+            <div class="flex justify-between items-center">
+              <Button @click.stop="goToEventDetail(event.id)" class="p-button-text" size="small"
+                >查看詳情</Button
+              >
+              <div v-if="canEditEvent(event)" class="flex space-x-2">
+                <Button
+                  @click.stop="editEvent(event.id)"
+                  icon="pi pi-pencil"
+                  class="p-button-text p-button-sm"
+                  size="small"
+                />
+                <Button
+                  @click.stop="confirmDeleteEvent(event)"
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger p-button-sm"
+                  size="small"
+                />
+              </div>
             </div>
-
-            <div v-if="event.attendees" class="flex items-center text-sm text-gray-500">
-              <i class="pi pi-users mr-2"></i>
-              參與者: {{ event.attendees.length }} 人
-            </div>
-          </div>
-        </template>
-
-        <template #footer>
-          <div class="flex justify-between items-center">
-            <Button @click.stop="goToEventDetail(event.id)" class="p-button-text" size="small">
-              查看詳情
-            </Button>
-
-            <div v-if="canEditEvent(event)" class="flex space-x-2">
-              <Button
-                @click.stop="editEvent(event.id)"
-                icon="pi pi-pencil"
-                class="p-button-text p-button-sm"
-                size="small"
-              />
-              <Button
-                @click.stop="confirmDeleteEvent(event)"
-                icon="pi pi-trash"
-                class="p-button-text p-button-danger p-button-sm"
-                size="small"
-              />
-            </div>
-          </div>
-        </template>
-      </Card>
+          </template>
+        </Card>
+      </div>
     </div>
 
     <!-- 刪除確認對話框 -->
@@ -130,7 +235,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, reactive } from 'vue'
+const showCreateDialog = ref(false)
+const createForm = reactive({
+  title: '',
+  description: '',
+  date: '',
+  location: '',
+})
+
+const handleCreateEvent = async () => {
+  try {
+    await eventStore.createEvent({
+      title: createForm.title,
+      description: createForm.description,
+      date: createForm.date,
+      location: createForm.location,
+    })
+    showCreateDialog.value = false
+    // 清空表單
+    createForm.title = ''
+    createForm.description = ''
+    createForm.date = ''
+    createForm.location = ''
+    // 重新載入活動
+    await loadEvents()
+  } catch (error) {
+    // 可根據 eventStore.error 顯示錯誤
+  }
+}
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useEventStore } from '@/stores/event'
@@ -160,6 +293,17 @@ const loadEvents = async () => {
   }
 }
 
+// 計算屬於登入者的活動
+const myEvents = computed(() => {
+  if (!authStore.isAuthenticated || !authStore.user) return []
+  return eventStore.events.filter((e) => e.organizer_id === (authStore.user?.id ?? -1))
+})
+
+// 其他活動（不屬於登入者）
+const otherEvents = computed(() => {
+  if (!authStore.isAuthenticated || !authStore.user) return eventStore.events
+  return eventStore.events.filter((e) => e.organizer_id !== (authStore.user?.id ?? -1))
+})
 const goToEventDetail = (eventId: number) => {
   router.push(`/events/${eventId}`)
 }

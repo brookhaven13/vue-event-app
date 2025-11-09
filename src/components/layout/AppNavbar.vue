@@ -157,22 +157,9 @@ const isMobileMenuOpen = ref(false)
 
 const userMenuItems = computed(() => [
   {
-    label: '我的儀表板',
-    icon: 'pi pi-chart-line',
-    command: () => router.push('/dashboard'),
-  },
-  {
-    label: '瀏覽活動',
-    icon: 'pi pi-list',
-    command: () => router.push('/events'),
-  },
-  {
-    separator: true,
-  },
-  {
-    label: '建立活動',
-    icon: 'pi pi-plus',
-    command: () => router.push('/events/create'),
+    label: '詳細資料',
+    icon: 'pi pi-user',
+    command: () => router.push('/profile'),
   },
   {
     separator: true,
