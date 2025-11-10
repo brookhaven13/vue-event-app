@@ -5,7 +5,7 @@
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">登入您的帳戶</h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           或者
-          <router-link to="register" class="font-medium text-indigo-600 hover:text-indigo-500">
+          <router-link to="register" class="font-medium text-blue-600 hover:text-blue-500">
             註冊新帳戶
           </router-link>
         </p>
@@ -26,7 +26,7 @@
                 v-model="form.email"
                 type="email"
                 placeholder="請輸入您的電子郵件"
-                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 :class="{ 'border-red-300 focus:ring-red-500 focus:border-red-500': emailError }"
                 required
               />
@@ -50,7 +50,7 @@
                 :feedback="false"
                 toggle-mask
                 class="w-full"
-                input-class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                input-class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 :input-style="{ 'border-color': passwordError ? '#fca5a5' : '' }"
                 required
               />
@@ -72,7 +72,7 @@
           <Button
             type="submit"
             :loading="authStore.isLoading"
-            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-tranblue-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <i v-if="!authStore.isLoading" class="pi pi-sign-in mr-2"></i>
             <i v-else class="pi pi-spin pi-spinner mr-2"></i>

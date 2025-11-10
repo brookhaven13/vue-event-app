@@ -27,7 +27,7 @@
         <!-- 頁面標題 -->
         <div class="mb-8">
           <h1 class="text-3xl font-bold text-gray-900">編輯活動</h1>
-          <p class="text-gray-600 mt-2">修改 "{{ event.title }}" 的資訊</p>
+          <p class="text-gray-600 mt-2">修改 "{{ event.name }}" 的資訊</p>
         </div>
 
         <!-- 表單 -->
@@ -36,18 +36,18 @@
             <form @submit.prevent="handleUpdateEvent" class="space-y-6">
               <!-- 標題 -->
               <div class="space-y-2">
-                <label for="title" class="block text-sm font-medium text-gray-700">
+                <label for="name" class="block text-sm font-medium text-gray-700">
                   活動標題 *
                 </label>
                 <InputText
-                  id="title"
-                  v-model="form.title"
+                  id="name"
+                  v-model="form.name"
                   placeholder="請輸入活動標題"
                   class="w-full"
-                  :class="{ 'p-invalid': titleError }"
+                  :class="{ 'p-invalid': nameError }"
                   required
                 />
-                <small v-if="titleError" class="p-error">{{ titleError }}</small>
+                <small v-if="nameError" class="p-error">{{ nameError }}</small>
               </div>
 
               <!-- 描述 -->
@@ -55,15 +55,35 @@
                 <label for="description" class="block text-sm font-medium text-gray-700">
                   活動描述 *
                 </label>
-                <Textarea
+                <Editor
                   id="description"
                   v-model="form.description"
-                  placeholder="請輸入活動描述"
+                  editor-style="height: 320px"
                   class="w-full"
                   :class="{ 'p-invalid': descriptionError }"
-                  rows="5"
-                  required
-                />
+                >
+                  <template #toolbar>
+                    <span class="ql-formats">
+                      <button class="ql-bold" v-tooltip.bottom="'粗體'"></button>
+                      <button class="ql-italic" v-tooltip.bottom="'斜體'"></button>
+                      <button class="ql-underline" v-tooltip.bottom="'底線'"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <button
+                        class="ql-list"
+                        value="ordered"
+                        v-tooltip.bottom="'有序列表'"
+                      ></button>
+                      <button class="ql-list" value="bullet" v-tooltip.bottom="'無序列表'"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <button class="ql-link" v-tooltip.bottom="'插入連結'"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <button class="ql-clean" v-tooltip.bottom="'清除格式'"></button>
+                    </span>
+                  </template>
+                </Editor>
                 <small v-if="descriptionError" class="p-error">{{ descriptionError }}</small>
               </div>
 
@@ -117,13 +137,14 @@
                   @click="$router.back()"
                   label="取消"
                   class="p-button-outlined"
+                  severity="secondary"
                 />
                 <Button
                   type="submit"
                   label="更新活動"
                   :loading="isUpdating"
                   :disabled="!isFormValid || !hasChanges"
-                  class="bg-indigo-600 hover:bg-indigo-700"
+                  class="bg-blue-600 hover:bg-blue-700"
                 />
               </div>
             </form>
@@ -142,7 +163,7 @@ import { useEventStore } from '@/stores/event'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
-import Textarea from 'primevue/textarea'
+import Editor from 'primevue/editor'
 import Calendar from 'primevue/calendar'
 import Message from 'primevue/message'
 import ProgressSpinner from 'primevue/progressspinner'
@@ -156,14 +177,14 @@ const isUpdating = ref(false)
 const updateError = ref<string | null>(null)
 
 const form = ref({
-  title: '',
+  name: '',
   description: '',
   date: null as Date | null,
   location: '',
 })
 
 const originalForm = ref({
-  title: '',
+  name: '',
   description: '',
   date: null as Date | null,
   location: '',
@@ -172,14 +193,16 @@ const originalForm = ref({
 const eventId = computed(() => Number(route.params.id))
 const event = computed(() => eventStore.currentEvent)
 
-const titleError = computed(() => {
-  if (!form.value.title) return ''
-  return form.value.title.length < 3 ? '標題至少需要 3 個字符' : ''
+const nameError = computed(() => {
+  if (!form.value.name) return ''
+  return form.value.name.length < 3 ? '標題至少需要 3 個字符' : ''
 })
 
 const descriptionError = computed(() => {
   if (!form.value.description) return ''
-  return form.value.description.length < 10 ? '描述至少需要 10 個字符' : ''
+  // 移除 HTML 標籤來計算實際文字長度
+  const textContent = form.value.description.replace(/<[^>]*>/g, '').trim()
+  return textContent.length < 10 ? '描述至少需要 10 個字符' : ''
 })
 
 const dateError = computed(() => {
@@ -195,11 +218,11 @@ const locationError = computed(() => {
 
 const isFormValid = computed(() => {
   return (
-    form.value.title &&
+    form.value.name &&
     form.value.description &&
     form.value.date &&
     form.value.location &&
-    !titleError.value &&
+    !nameError.value &&
     !descriptionError.value &&
     !dateError.value &&
     !locationError.value
@@ -208,7 +231,7 @@ const isFormValid = computed(() => {
 
 const hasChanges = computed(() => {
   return (
-    form.value.title !== originalForm.value.title ||
+    form.value.name !== originalForm.value.name ||
     form.value.description !== originalForm.value.description ||
     form.value.date?.getTime() !== originalForm.value.date?.getTime() ||
     form.value.location !== originalForm.value.location
@@ -221,7 +244,7 @@ const canEdit = computed(() => {
     authStore.isAuthenticated &&
     authStore.user &&
     event.value &&
-    event.value.organizer_id === authStore.user.id
+    event.value.owner.id === authStore.user.id
   )
 })
 
@@ -243,14 +266,14 @@ watch(
       const eventDate = new Date(newEvent.date)
 
       form.value = {
-        title: newEvent.title,
+        name: newEvent.name,
         description: newEvent.description,
         date: eventDate,
         location: newEvent.location,
       }
 
       originalForm.value = {
-        title: newEvent.title,
+        name: newEvent.name,
         description: newEvent.description,
         date: eventDate,
         location: newEvent.location,
@@ -280,21 +303,14 @@ const handleUpdateEvent = async () => {
   isUpdating.value = true
 
   try {
-    const eventData: Record<string, string> = {}
+    // 發送所有必要欄位，格式與 createEvent 一致
+    const eventData = {
+      name: form.value.name,
+      description: form.value.description,
+      date: form.value.date!.toISOString(),
+      location: form.value.location,
+    }
 
-    // 只包含有變更的欄位
-    if (form.value.title !== originalForm.value.title) {
-      eventData.title = form.value.title
-    }
-    if (form.value.description !== originalForm.value.description) {
-      eventData.description = form.value.description
-    }
-    if (form.value.date?.getTime() !== originalForm.value.date?.getTime()) {
-      eventData.date = form.value.date!.toISOString()
-    }
-    if (form.value.location !== originalForm.value.location) {
-      eventData.location = form.value.location
-    }
     await eventStore.updateEvent(eventId.value, eventData)
 
     // 更新成功後導向事件詳情頁面

@@ -40,15 +40,31 @@
               <label for="description" class="block text-sm font-medium text-gray-700">
                 活動描述 *
               </label>
-              <Textarea
+              <Editor
                 id="description"
                 v-model="form.description"
-                placeholder="請輸入活動描述"
+                editor-style="height: 320px"
                 class="w-full"
                 :class="{ 'p-invalid': descriptionError }"
-                rows="5"
-                required
-              />
+              >
+                <template #toolbar>
+                  <span class="ql-formats">
+                    <button class="ql-bold" v-tooltip.bottom="'粗體'"></button>
+                    <button class="ql-italic" v-tooltip.bottom="'斜體'"></button>
+                    <button class="ql-underline" v-tooltip.bottom="'底線'"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-list" value="ordered" v-tooltip.bottom="'有序列表'"></button>
+                    <button class="ql-list" value="bullet" v-tooltip.bottom="'無序列表'"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-link" v-tooltip.bottom="'插入連結'"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-clean" v-tooltip.bottom="'清除格式'"></button>
+                  </span>
+                </template>
+              </Editor>
               <small v-if="descriptionError" class="p-error">{{ descriptionError }}</small>
             </div>
 
@@ -107,7 +123,7 @@
                 label="建立活動"
                 :loading="eventStore.isLoading"
                 :disabled="!isFormValid"
-                class="bg-indigo-600 hover:bg-indigo-700"
+                class="bg-blue-600 hover:bg-blue-700"
               />
             </div>
           </form>
@@ -125,7 +141,7 @@ import { useAuthStore } from '@/stores/auth'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
-import Textarea from 'primevue/textarea'
+import Editor from 'primevue/editor'
 import Calendar from 'primevue/calendar'
 
 const router = useRouter()
@@ -146,7 +162,9 @@ const titleError = computed(() => {
 
 const descriptionError = computed(() => {
   if (!form.value.description) return ''
-  return form.value.description.length < 10 ? '描述至少需要 10 個字符' : ''
+  // 移除 HTML 標籤來計算實際文字長度
+  const textContent = form.value.description.replace(/<[^>]*>/g, '').trim()
+  return textContent.length < 10 ? '描述至少需要 10 個字符' : ''
 })
 
 const dateError = computed(() => {

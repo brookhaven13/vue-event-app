@@ -1,11 +1,42 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
+    <!-- 註冊成功畫面 -->
+    <div v-if="registrationSuccess" class="max-w-md w-full">
+      <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-8 text-center space-y-6">
+        <!-- 成功圖標 -->
+        <div class="flex justify-center">
+          <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="pi pi-check text-green-600 text-4xl"></i>
+          </div>
+        </div>
+
+        <!-- 成功標題 -->
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">註冊成功！</h2>
+          <p class="text-gray-600">
+            歡迎加入我們，{{ form.name }}！<br />
+            您的帳戶已經創建完成。
+          </p>
+        </div>
+
+        <!-- 開始使用按鈕 -->
+        <Button
+          @click="goToHome"
+          class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+        >
+          <i class="pi pi-arrow-right mr-2"></i>
+          開始使用
+        </Button>
+      </div>
+    </div>
+
+    <!-- 註冊表單 -->
+    <div v-else class="max-w-md w-full space-y-8">
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">註冊新帳戶</h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           或者
-          <router-link to="login" class="font-medium text-indigo-600 hover:text-indigo-500">
+          <router-link to="login" class="font-medium text-blue-600 hover:text-blue-500">
             登入現有帳戶
           </router-link>
         </p>
@@ -17,52 +48,44 @@
           <!-- 用戶名輸入框 -->
           <div class="space-y-2">
             <label for="name" class="block text-sm font-medium text-gray-700">姓名</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="pi pi-user text-gray-400"></i>
-              </div>
+            <IconField>
+              <InputIcon class="pi pi-user" />
               <InputText
                 id="name"
                 v-model="form.name"
                 type="text"
                 placeholder="請輸入姓名"
-                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                :class="{ 'border-red-300 focus:ring-red-500 focus:border-red-500': nameError }"
+                class="w-full"
+                :class="{ 'p-invalid': nameError }"
                 required
               />
-            </div>
+            </IconField>
             <small v-if="nameError" class="text-red-600 text-sm">{{ nameError }}</small>
           </div>
 
           <!-- 電子郵件輸入框 -->
           <div class="space-y-2">
             <label for="email" class="block text-sm font-medium text-gray-700">電子郵件</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="pi pi-envelope text-gray-400"></i>
-              </div>
+            <IconField>
+              <InputIcon class="pi pi-envelope" />
               <InputText
                 id="email"
                 v-model="form.email"
                 type="email"
                 placeholder="請輸入電子郵件"
-                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                :class="{ 'border-red-300 focus:ring-red-500 focus:border-red-500': emailError }"
+                class="w-full"
+                :class="{ 'p-invalid': emailError }"
                 required
               />
-            </div>
+            </IconField>
             <small v-if="emailError" class="text-red-600 text-sm">{{ emailError }}</small>
           </div>
 
           <!-- 密碼輸入框 -->
           <div class="space-y-2">
             <label for="password" class="block text-sm font-medium text-gray-700">密碼</label>
-            <div class="relative">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10"
-              >
-                <i class="pi pi-lock text-gray-400"></i>
-              </div>
+            <IconField>
+              <InputIcon class="pi pi-lock" />
               <Password
                 id="password"
                 v-model="form.password"
@@ -70,11 +93,10 @@
                 :feedback="true"
                 toggle-mask
                 class="w-full"
-                input-class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                :input-style="{ 'border-color': passwordError ? '#fca5a5' : '' }"
+                :class="{ 'p-invalid': passwordError }"
                 required
               />
-            </div>
+            </IconField>
             <small v-if="passwordError" class="text-red-600 text-sm">{{ passwordError }}</small>
           </div>
 
@@ -83,12 +105,8 @@
             <label for="confirmPassword" class="block text-sm font-medium text-gray-700"
               >確認密碼</label
             >
-            <div class="relative">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10"
-              >
-                <i class="pi pi-lock text-gray-400"></i>
-              </div>
+            <IconField>
+              <InputIcon class="pi pi-lock" />
               <Password
                 id="confirmPassword"
                 v-model="form.confirmPassword"
@@ -96,11 +114,10 @@
                 :feedback="false"
                 toggle-mask
                 class="w-full"
-                input-class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                :input-style="{ 'border-color': confirmPasswordError ? '#fca5a5' : '' }"
+                :class="{ 'p-invalid': confirmPasswordError }"
                 required
               />
-            </div>
+            </IconField>
             <small v-if="confirmPasswordError" class="text-red-600 text-sm">{{
               confirmPasswordError
             }}</small>
@@ -121,7 +138,7 @@
             type="submit"
             :loading="authStore.isLoading"
             :disabled="!isFormValid"
-            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-tranblue-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             <i v-if="!authStore.isLoading" class="pi pi-user-plus mr-2"></i>
             <i v-else class="pi pi-spin pi-spinner mr-2"></i>
@@ -140,9 +157,13 @@ import { useAuthStore } from '@/stores/auth'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
 const router = useRouter()
 const authStore = useAuthStore()
+
+const registrationSuccess = ref(false)
 
 const form = ref({
   name: '',
@@ -201,12 +222,16 @@ const handleRegister = async () => {
       password: form.value.password,
     })
 
-    // 註冊成功後導向首頁
-    router.push('events')
+    // 註冊成功，顯示成功畫面
+    registrationSuccess.value = true
   } catch (error) {
     // 錯誤已經在 store 中處理
     console.error('Register failed:', error)
   }
+}
+
+const goToHome = () => {
+  router.push('/events')
 }
 </script>
 

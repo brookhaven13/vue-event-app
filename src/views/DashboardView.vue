@@ -21,7 +21,7 @@
           </template>
         </Card>
 
-        <Card class="bg-gradient-to-r from-green-500 to-green-600 text-white">
+        <Card class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white">
           <template #content>
             <div class="flex items-center justify-between">
               <div>
@@ -53,17 +53,20 @@
         </template>
         <template #content>
           <div class="flex flex-wrap gap-4">
+            <Button @click="$router.push('events/create')" icon="pi pi-plus" label="建立新活動" />
             <Button
-              @click="$router.push('events/create')"
-              icon="pi pi-plus"
-              label="建立新活動"
-              class="bg-indigo-600 hover:bg-indigo-700"
+              @click="$router.push('/my/events')"
+              icon="pi pi-cog"
+              label="管理我的活動"
+              class="p-button-outlined"
             />
             <Button
-              @click="$router.push('events')"
-              icon="pi pi-list"
-              label="瀏覽所有活動"
+              v-if="authStore.user?.role === 'admin'"
+              @click="$router.push('/admin/events')"
+              icon="pi pi-cog"
+              label="管理所有活動"
               class="p-button-outlined"
+              severity="success"
             />
           </div>
         </template>
@@ -77,8 +80,8 @@
             <div class="flex justify-between items-center">
               <span class="text-lg font-semibold">我主辦的活動</span>
               <Button
-                @click="$router.push('events/create')"
-                icon="pi pi-plus"
+                @click="$router.push('/my/events')"
+                icon="pi pi-cog"
                 class="p-button-text p-button-sm"
                 size="small"
               />
@@ -107,8 +110,10 @@
               >
                 <div class="flex justify-between items-start">
                   <div class="flex-1">
-                    <h3 class="font-medium text-gray-900 truncate">{{ event.title }}</h3>
-                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{ event.description }}</p>
+                    <h3 class="font-medium text-gray-900 truncate">{{ event.name }}</h3>
+                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">
+                      {{ stripHtml(event.description) }}
+                    </p>
                     <div class="flex items-center text-xs text-gray-500 mt-2">
                       <i class="pi pi-calendar mr-1"></i>
                       {{ formatDate(event.date) }}
@@ -120,6 +125,14 @@
                       icon="pi pi-pencil"
                       class="p-button-text p-button-sm"
                       size="small"
+                    />
+                    <Button
+                      @click.stop="deleteEvent(event.id)"
+                      icon="pi pi-trash"
+                      class="p-button-text p-button-sm"
+                      size="small"
+                      severity="danger"
+                      v-tooltip.bottom="'刪除活動'"
                     />
                   </div>
                 </div>
@@ -135,7 +148,7 @@
               <span class="text-lg font-semibold">我參與的活動</span>
               <Button
                 @click="$router.push('events')"
-                icon="pi pi-search"
+                icon="pi pi-eye"
                 class="p-button-text p-button-sm"
                 size="small"
               />
@@ -164,15 +177,17 @@
               >
                 <div class="flex justify-between items-start">
                   <div class="flex-1">
-                    <h3 class="font-medium text-gray-900 truncate">{{ event.title }}</h3>
-                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{ event.description }}</p>
+                    <h3 class="font-medium text-gray-900 truncate">{{ event.name }}</h3>
+                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">
+                      {{ stripHtml(event.description) }}
+                    </p>
                     <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
                       <div class="flex items-center">
                         <i class="pi pi-calendar mr-1"></i>
                         {{ formatDate(event.date) }}
                       </div>
                       <div class="text-right">
-                        <div>主辦: {{ event.organizer?.name }}</div>
+                        <div>主辦: {{ event.owner?.name }}</div>
                       </div>
                     </div>
                   </div>
@@ -199,7 +214,10 @@ const eventStore = useEventStore()
 
 const myEvents = computed(() => {
   if (!authStore.user) return []
-  return eventStore.events.filter((event) => event.organizer_id === authStore.user!.id)
+  return eventStore.events.filter((event) => {
+    // 過濾出我主辦的且未過期的活動
+    return event.owner.id === authStore.user!.id && new Date(event.date) > new Date()
+  })
 })
 
 const attendingEvents = computed(() => {
@@ -230,6 +248,15 @@ const loadEvents = async () => {
   }
 }
 
+const deleteEvent = async (eventId: number) => {
+  try {
+    await eventStore.deleteEvent(eventId)
+    await loadEvents()
+  } catch (error) {
+    console.error('Failed to delete event:', error)
+  }
+}
+
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
   return date.toLocaleDateString('zh-TW', {
@@ -239,14 +266,23 @@ const formatDate = (dateString: string) => {
     minute: '2-digit',
   })
 }
+
+// 移除 HTML 標籤，取得純文字
+const stripHtml = (html: string) => {
+  const tmp = document.createElement('div')
+  tmp.innerHTML = html
+  return tmp.textContent || tmp.innerText || ''
+}
 </script>
 
 <style scoped>
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 自定義滾動條樣式 */

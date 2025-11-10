@@ -24,7 +24,7 @@
       <Button
         v-if="authStore.isAuthenticated"
         @click="$router.push('events/create')"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white"
+        class="bg-blue-600 hover:bg-blue-700 text-white"
       >
         建立第一個活動
       </Button>
@@ -35,11 +35,11 @@
       <!-- 登入者的活動 -->
       <div v-if="authStore.isAuthenticated && myEvents.length > 0">
         <div class="flex justify-between items-center mb-2">
-          <h2 class="text-xl font-bold text-indigo-700">我的活動</h2>
+          <h2 class="text-xl font-bold text-zinc-700">我的活動</h2>
           <Button
             icon="pi pi-plus"
             label="建立活動"
-            class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md"
             @click="showCreateDialog = true"
           />
         </div>
@@ -92,7 +92,7 @@
                 <Button
                   label="建立"
                   type="submit"
-                  class="bg-indigo-600 text-white"
+                  class="bg-blue-600 text-white"
                   :loading="eventStore.isLoading"
                 />
               </div>
@@ -101,12 +101,12 @@
           <Card
             v-for="event in myEvents"
             :key="event.id"
-            class="event-card rounded-lg cursor-pointer transform transition-transform hover:scale-105"
+            class="event-card rounded-lg cursor-pointer transform transition-transform hover:scale-103"
             @click="goToEventDetail(event.id)"
           >
             <template #header>
               <div
-                class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center rounded-t-lg"
+                class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-t-lg"
               >
                 <i class="pi pi-calendar text-white text-6xl"></i>
               </div>
@@ -116,7 +116,7 @@
             </template>
             <template #content>
               <div class="space-y-3">
-                <p class="text-gray-600 line-clamp-3">{{ event.description }}</p>
+                <p class="text-gray-600 line-clamp-3">{{ stripHtml(event.description) }}</p>
                 <div class="flex items-center text-sm text-gray-500">
                   <i class="pi pi-calendar mr-2"></i>{{ formatDate(event.date) }}
                 </div>
@@ -124,7 +124,7 @@
                   <i class="pi pi-map-marker mr-2"></i>{{ event.location }}
                 </div>
                 <div class="flex items-center text-sm text-gray-500">
-                  <i class="pi pi-user mr-2"></i>主辦者: {{ event.organizer?.name || '未知' }}
+                  <i class="pi pi-user mr-2"></i>主辦者: {{ event.owner?.name || '未知' }}
                 </div>
                 <div v-if="event.attendees" class="flex items-center text-sm text-gray-500">
                   <i class="pi pi-users mr-2"></i>參與者: {{ event.attendees.length }} 人
@@ -132,8 +132,12 @@
               </div>
             </template>
             <template #footer>
-              <div class="flex justify-between items-center">
-                <Button @click.stop="goToEventDetail(event.id)" class="p-button-text" size="small"
+              <div class="flex justify-between items-center pt-3">
+                <Button
+                  @click.stop="goToEventDetail(event.id)"
+                  class="bg-blue-600 text-white rounded-md px-4 py-2"
+                  size="small"
+                  variant="outlined"
                   >查看詳情</Button
                 >
                 <div v-if="canEditEvent(event)" class="flex space-x-2">
@@ -163,12 +167,12 @@
         <Card
           v-for="event in otherEvents"
           :key="event.id"
-          class="event-card rounded-lg cursor-pointer transform transition-transform hover:scale-105"
+          class="event-card rounded-lg cursor-pointer transform transition-transform hover:scale-103"
           @click="goToEventDetail(event.id)"
         >
           <template #header>
             <div
-              class="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center rounded-t-lg"
+              class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-t-lg"
             >
               <i class="pi pi-calendar text-white text-6xl"></i>
             </div>
@@ -178,7 +182,7 @@
           </template>
           <template #content>
             <div class="space-y-3">
-              <p class="text-gray-600 line-clamp-3">{{ event.description }}</p>
+              <p class="text-gray-600 line-clamp-3">{{ stripHtml(event.description) }}</p>
               <div class="flex items-center text-sm text-gray-500">
                 <i class="pi pi-calendar mr-2"></i>{{ formatDate(event.date) }}
               </div>
@@ -186,7 +190,7 @@
                 <i class="pi pi-map-marker mr-2"></i>{{ event.location }}
               </div>
               <div class="flex items-center text-sm text-gray-500">
-                <i class="pi pi-user mr-2"></i>主辦者: {{ event.organizer?.name || '未知' }}
+                <i class="pi pi-user mr-2"></i>主辦者: {{ event.owner?.name || '未知' }}
               </div>
               <div v-if="event.attendees" class="flex items-center text-sm text-gray-500">
                 <i class="pi pi-users mr-2"></i>參與者: {{ event.attendees.length }} 人
@@ -194,8 +198,12 @@
             </div>
           </template>
           <template #footer>
-            <div class="flex justify-between items-center">
-              <Button @click.stop="goToEventDetail(event.id)" class="p-button-text" size="small"
+            <div class="flex justify-between items-center pt-3">
+              <Button
+                @click.stop="goToEventDetail(event.id)"
+                class="bg-blue-600 text-white rounded-md px-4 py-2"
+                size="small"
+                variant="outlined"
                 >查看詳情</Button
               >
               <div v-if="canEditEvent(event)" class="flex space-x-2">
@@ -220,7 +228,7 @@
 
     <!-- 刪除確認對話框 -->
     <Dialog v-model:visible="deleteDialog" header="確認刪除" :modal="true" class="w-96">
-      <p class="mb-4">您確定要刪除活動 "{{ eventToDelete?.title }}" 嗎？此操作無法復原。</p>
+      <p class="mb-4">您確定要刪除活動 "{{ eventToDelete?.name }}" 嗎？此操作無法復原。</p>
       <template #footer>
         <Button label="取消" @click="deleteDialog = false" class="p-button-text" />
         <Button
@@ -319,13 +327,13 @@ const loadEvents = async () => {
 // 計算屬於登入者的活動
 const myEvents = computed(() => {
   if (!authStore.isAuthenticated || !authStore.user) return []
-  return eventStore.events.filter((e) => e.organizer_id === (authStore.user?.id ?? -1))
+  return eventStore.events.filter((e) => e.owner.id === (authStore.user?.id ?? -1))
 })
 
 // 其他活動（不屬於登入者）
 const otherEvents = computed(() => {
   if (!authStore.isAuthenticated || !authStore.user) return eventStore.events
-  return eventStore.events.filter((e) => e.organizer_id !== (authStore.user?.id ?? -1))
+  return eventStore.events.filter((e) => e.owner.id !== (authStore.user?.id ?? -1))
 })
 const goToEventDetail = (eventId: number) => {
   router.push(`/events/${eventId}`)
@@ -336,7 +344,9 @@ const editEvent = (eventId: number) => {
 }
 
 const canEditEvent = (event: Event) => {
-  return authStore.isAuthenticated && authStore.user && event.organizer_id === authStore.user.id
+  if (!authStore.isAuthenticated || !authStore.user) return false
+  // Admin 可以編輯所有活動，或者是活動主辦者
+  return authStore.user.role === 'admin' || event.owner.id === authStore.user.id
 }
 
 const confirmDeleteEvent = (event: Event) => {
@@ -366,6 +376,13 @@ const formatDate = (dateString: string) => {
     minute: '2-digit',
   })
 }
+
+// 移除 HTML 標籤，取得純文字
+const stripHtml = (html: string) => {
+  const tmp = document.createElement('div')
+  tmp.innerHTML = html
+  return tmp.textContent || tmp.innerText || ''
+}
 </script>
 
 <style scoped>
@@ -380,6 +397,7 @@ const formatDate = (dateString: string) => {
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

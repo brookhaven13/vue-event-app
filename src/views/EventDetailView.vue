@@ -24,17 +24,16 @@
       />
 
       <!-- 事件標題和操作按鈕 -->
-      <div class="flex justify-between items-start mb-6">
+      <div class="flex justify-between items-start space-x-2 mb-6 w-full">
         <div>
-          <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ event.name }}</h1>
+          <h1 class="text-4xl font-bold text-gray-900 mb-2 w-full">{{ event.name }}</h1>
           <div class="flex items-center text-gray-600">
             <i class="pi pi-user mr-2"></i>
-            <span>主辦者: {{ event.organizer?.name || '未知' }}</span>
-            <span>主辦者: {{ event.organizer?.name || '未知' }}</span>
+            <span>主辦者: {{ event.owner?.name || '未知' }}</span>
           </div>
         </div>
 
-        <div v-if="canEditEvent" class="flex space-x-2">
+        <div v-if="canEditEvent" class="flex space-x-2 min-w-[11rem]">
           <Button @click="editEvent" icon="pi pi-pencil" label="編輯" class="p-button-outlined" />
           <Button
             @click="confirmDeleteEvent"
@@ -52,7 +51,7 @@
           <Card class="mb-6">
             <template #header>
               <div
-                class="h-64 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center rounded-tl-lg rounded-tr-lg"
+                class="h-64 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-tl-lg rounded-tr-lg"
               >
                 <i class="pi pi-calendar text-white text-8xl"></i>
               </div>
@@ -62,7 +61,10 @@
               <div class="space-y-6">
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900 mb-3">活動描述</h3>
-                  <p class="text-gray-700 whitespace-pre-wrap">{{ event.description }}</p>
+                  <div
+                    class="text-gray-700 prose prose-slate max-w-none ql-editor-content"
+                    v-html="event.description"
+                  ></div>
                 </div>
               </div>
             </template>
@@ -107,18 +109,30 @@
           </Card>
 
           <!-- 參與按鈕 -->
-          <Card v-if="authStore.isAuthenticated && !canEditEvent">
+          <Card v-if="!canEditEvent">
             <template #content>
+              <!-- 未登入用戶 -->
               <Button
-                v-if="!isAttending"
-                @click="joinEvent"
+                v-if="!authStore.isAuthenticated"
+                @click="$router.push('/login')"
                 class="w-full bg-green-600 hover:bg-green-700 text-white"
+              >
+                <i class="pi pi-sign-in mr-2"></i>
+                請登入以參加活動
+              </Button>
+
+              <!-- 已登入用戶 - 未參加 -->
+              <Button
+                v-else-if="!isAttending"
+                @click="joinEvent"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                 :loading="joiningEvent"
               >
                 <i class="pi pi-plus mr-2"></i>
                 參加活動
               </Button>
 
+              <!-- 已登入用戶 - 已參加 -->
               <Button
                 v-else
                 @click="leaveEvent"
@@ -144,7 +158,7 @@
                   :key="attendee.id"
                   class="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg"
                 >
-                  <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                  <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                     <i class="pi pi-user text-white text-sm"></i>
                   </div>
                   <div>
@@ -199,12 +213,9 @@ const eventId = computed(() => Number(route.params.id))
 const event = computed(() => eventStore.currentEvent)
 
 const canEditEvent = computed(() => {
-  return (
-    authStore.isAuthenticated &&
-    authStore.user &&
-    event.value &&
-    event.value.organizer_id === authStore.user.id
-  )
+  if (!authStore.isAuthenticated || !authStore.user || !event.value) return false
+  // Admin 可以編輯所有活動，或者是活動主辦者
+  return authStore.user.role === 'admin' || event.value.owner.id === authStore.user.id
 })
 
 const attendeeCount = computed(() => {
@@ -303,5 +314,56 @@ const formatDate = (dateString: string) => {
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
   background: #a1a1a1;
+}
+
+/* Quill Editor 內容樣式 */
+.ql-editor-content :deep(p) {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
+.ql-editor-content :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.ql-editor-content :deep(ul),
+.ql-editor-content :deep(ol) {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+  list-style-position: outside;
+}
+
+.ql-editor-content :deep(ul) {
+  list-style-type: disc;
+}
+
+.ql-editor-content :deep(ol) {
+  list-style-type: decimal;
+}
+
+.ql-editor-content :deep(li) {
+  margin-bottom: 0.5em;
+  display: list-item;
+}
+
+.ql-editor-content :deep(strong) {
+  font-weight: 600;
+}
+
+.ql-editor-content :deep(em) {
+  font-style: italic;
+}
+
+.ql-editor-content :deep(u) {
+  text-decoration: underline;
+}
+
+.ql-editor-content :deep(a) {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.ql-editor-content :deep(a:hover) {
+  color: #1d4ed8;
 }
 </style>

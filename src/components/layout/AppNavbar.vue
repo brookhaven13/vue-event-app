@@ -5,7 +5,7 @@
         <!-- Logo 和品牌名稱 -->
         <div class="flex items-center">
           <router-link to="/events" class="flex items-center space-x-2">
-            <i class="pi pi-calendar text-2xl text-indigo-600"></i>
+            <i class="pi pi-calendar text-2xl text-blue-600"></i>
             <span class="text-xl font-bold text-gray-900">EventApp</span>
           </router-link>
         </div>
@@ -15,8 +15,8 @@
           <div class="flex items-center space-x-8">
             <router-link
               to="/events"
-              class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              :class="{ 'text-indigo-600 bg-indigo-50': $route.path.startsWith('/events') }"
+              class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              :class="{ 'text-blue-600 bg-blue-50': $route.path.startsWith('/events') }"
             >
               瀏覽活動
             </router-link>
@@ -24,8 +24,8 @@
             <template v-if="authStore.isAuthenticated">
               <router-link
                 to="/dashboard"
-                class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                :class="{ 'text-indigo-600 bg-indigo-50': $route.path === '/dashboard' }"
+                class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                :class="{ 'text-blue-600 bg-blue-50': $route.path === '/dashboard' }"
               >
                 我的儀表板
               </router-link>
@@ -34,45 +34,7 @@
         </div>
 
         <!-- 用戶菜單 -->
-        <div class="flex items-center space-x-4">
-          <!-- 已登入用戶 -->
-          <div v-if="authStore.isAuthenticated" class="relative">
-            <Menu ref="userMenu" :model="userMenuItems" :popup="true" class="w-48" />
-            <Button
-              @click="toggleUserMenu"
-              class="p-button-text p-button-plain flex items-center space-x-2"
-            >
-              <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
-                <i class="pi pi-user text-white text-sm"></i>
-              </div>
-              <span class="hidden sm:block text-gray-700">{{ authStore.user?.name }}</span>
-              <i class="pi pi-chevron-down text-gray-500 text-xs"></i>
-            </Button>
-          </div>
-
-          <!-- 未登入用戶 -->
-          <div v-else class="flex items-center space-x-3">
-            <router-link
-              to="/login"
-              class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              :class="{ 'text-indigo-600 bg-indigo-50': $route.path === '/login' }"
-              >登入</router-link
-            >
-            <router-link
-              to="/register"
-              class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              :class="{ 'text-indigo-600 bg-indigo-50': $route.path === '/register' }"
-              >註冊</router-link
-            >
-          </div>
-
-          <!-- 手機版菜單按鈕 -->
-          <Button
-            @click="toggleMobileMenu"
-            icon="pi pi-bars"
-            class="md:hidden p-button-text p-button-plain"
-          />
-        </div>
+        <UserMenu @toggle-mobile-menu="toggleMobileMenu" />
       </div>
 
       <!-- 手機版導航選單 -->
@@ -81,7 +43,7 @@
           <router-link
             to="/events"
             @click="isMobileMenuOpen = false"
-            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-white transition-colors"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-white transition-colors"
           >
             瀏覽活動
           </router-link>
@@ -90,7 +52,7 @@
             <router-link
               to="dashboard"
               @click="isMobileMenuOpen = false"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-white transition-colors"
             >
               我的儀表板
             </router-link>
@@ -98,7 +60,7 @@
             <router-link
               to="events/create"
               @click="isMobileMenuOpen = false"
-              class="block px-3 py-2 rounded-md text-base font-medium text-indigo-600 bg-white"
+              class="block px-3 py-2 rounded-md text-base font-medium text-emerald-600 bg-white"
             >
               建立活動
             </router-link>
@@ -118,14 +80,18 @@
               <router-link
                 to="login"
                 @click="isMobileMenuOpen = false"
-                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-white transition-colors"
+                class="block px-3 py-2 rounded-md text-base font-medium border border-emerald-600 text-emerald-600 hover:bg-emerald-50 transition-colors"
+                :class="{
+                  'border-emerald-600 text-emerald-600 bg-emerald-50': $route.path === '/login',
+                }"
               >
                 登入
               </router-link>
               <router-link
                 to="register"
                 @click="isMobileMenuOpen = false"
-                class="block px-3 py-2 rounded-md text-base font-medium text-indigo-600 bg-white"
+                class="block px-3 py-2 rounded-md text-base font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                :class="{ 'bg-emerald-700 text-white': $route.path === '/register' }"
               >
                 註冊
               </router-link>
@@ -138,38 +104,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import Button from 'primevue/button'
-import Menu from 'primevue/menu'
+import UserMenu from './UserMenu.vue'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 
-const userMenu = ref()
 const isMobileMenuOpen = ref(false)
-
-const userMenuItems = computed(() => [
-  {
-    label: '詳細資料',
-    icon: 'pi pi-user',
-    command: () => router.push('/profile'),
-  },
-  {
-    separator: true,
-  },
-  {
-    label: '登出',
-    icon: 'pi pi-sign-out',
-    command: handleLogout,
-  },
-])
-
-const toggleUserMenu = (event: Event) => {
-  userMenu.value.toggle(event)
-}
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -192,11 +136,6 @@ router.afterEach(() => {
 </script>
 
 <style scoped>
-/* 導航鏈接活躍狀態 */
-.router-link-active {
-  @apply text-indigo-600;
-}
-
 /* 平滑過渡動畫 */
 .transition-colors {
   transition-property: color, background-color, border-color;

@@ -3,6 +3,7 @@ export interface User {
   id: number
   name: string
   email: string
+  role?: 'admin' | 'user'
 }
 
 export interface Event {
@@ -11,8 +12,7 @@ export interface Event {
   description: string
   date: string
   location: string
-  organizer_id: number
-  organizer?: User
+  owner: User
   attendees?: User[]
   created_at?: string
   updated_at?: string
