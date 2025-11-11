@@ -24,18 +24,18 @@
       <div v-else>
         <!-- 統計資訊 -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <Card class="bg-blue-50">
+          <Card class="bg-amber-50">
             <template #content>
               <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ totalEvents }}</div>
+                <div class="text-2xl font-bold text-amber-600">{{ totalEvents }}</div>
                 <div class="text-sm text-gray-600">我的活動總數</div>
               </div>
             </template>
           </Card>
-          <Card class="bg-blue-50">
+          <Card class="bg-green-50">
             <template #content>
               <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ upcomingEvents }}</div>
+                <div class="text-2xl font-bold text-green-600">{{ upcomingEvents }}</div>
                 <div class="text-sm text-gray-600">即將舉辦</div>
               </div>
             </template>
@@ -59,7 +59,7 @@
                 @click="$router.push('/events/create')"
                 icon="pi pi-plus"
                 label="建立新活動"
-                class="bg-blue-600 hover:bg-blue-700"
+                class="bg-green-600 hover:bg-green-700"
                 size="small"
               />
             </div>
@@ -89,7 +89,7 @@
                   >
                     <td class="px-4 py-4">
                       <div class="flex items-center">
-                        <i class="pi pi-calendar text-blue-600 mr-2"></i>
+                        <i class="pi pi-calendar text-amber-600 mr-2"></i>
                         <span class="font-medium text-gray-900">{{ event.name }}</span>
                       </div>
                     </td>
@@ -111,7 +111,7 @@
                     <td class="px-4 py-4">
                       <span
                         v-if="isUpcoming(event.date)"
-                        class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700"
+                        class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700"
                       >
                         即將舉辦
                       </span>
@@ -133,7 +133,7 @@
                         <Button
                           @click="editEvent(event.id)"
                           icon="pi pi-pencil"
-                          class="p-button-text p-button-sm text-blue-600 hover:text-blue-700"
+                          class="p-button-text p-button-sm text-amber-600 hover:text-amber-700"
                           v-tooltip.top="'編輯'"
                         />
                         <Button
@@ -156,7 +156,7 @@
                   @click="$router.push('/events/create')"
                   icon="pi pi-plus"
                   label="建立第一個活動"
-                  class="mt-4 bg-blue-600 hover:bg-blue-700"
+                  class="mt-4 bg-amber-600 hover:bg-amber-700"
                 />
               </div>
             </div>

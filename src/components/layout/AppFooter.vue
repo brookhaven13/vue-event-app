@@ -5,23 +5,23 @@
         <!-- 品牌信息 -->
         <div class="md:col-span-2">
           <div class="flex items-center space-x-2 mb-4">
-            <i class="pi pi-calendar text-2xl text-blue-600"></i>
+            <i class="pi pi-calendar text-2xl text-amber-600"></i>
             <span class="text-xl font-bold text-gray-900">EventApp</span>
           </div>
           <p class="text-gray-600 text-sm mb-4">
             一個現代化的活動管理平台，讓您輕鬆創建、管理和參與各種活動。 連接人們，創造美好的體驗。
           </p>
           <!-- <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
+            <a href="#" class="text-gray-400 hover:text-amber-600 transition-colors">
               <i class="pi pi-facebook text-lg"></i>
             </a>
-            <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
+            <a href="#" class="text-gray-400 hover:text-amber-600 transition-colors">
               <i class="pi pi-twitter text-lg"></i>
             </a>
-            <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
+            <a href="#" class="text-gray-400 hover:text-amber-600 transition-colors">
               <i class="pi pi-instagram text-lg"></i>
             </a>
-            <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
+            <a href="#" class="text-gray-400 hover:text-amber-600 transition-colors">
               <i class="pi pi-linkedin text-lg"></i>
             </a>
           </div> -->
@@ -36,7 +36,7 @@
             <li>
               <router-link
                 to="events"
-                class="text-gray-600 hover:text-blue-600 text-sm transition-colors"
+                class="text-gray-600 hover:text-amber-600 text-sm transition-colors"
               >
                 瀏覽活動
               </router-link>
@@ -44,7 +44,7 @@
             <li v-if="authStore.isAuthenticated">
               <router-link
                 to="dashboard"
-                class="text-gray-600 hover:text-blue-600 text-sm transition-colors"
+                class="text-gray-600 hover:text-amber-600 text-sm transition-colors"
               >
                 我的儀表板
               </router-link>
@@ -52,7 +52,7 @@
             <li v-if="authStore.isAuthenticated">
               <router-link
                 to="events/create"
-                class="text-gray-600 hover:text-blue-600 text-sm transition-colors"
+                class="text-gray-600 hover:text-amber-600 text-sm transition-colors"
               >
                 建立活動
               </router-link>
@@ -60,7 +60,7 @@
             <li v-if="!authStore.isAuthenticated">
               <router-link
                 to="login"
-                class="text-gray-600 hover:text-blue-600 text-sm transition-colors"
+                class="text-gray-600 hover:text-amber-600 text-sm transition-colors"
               >
                 登入
               </router-link>
@@ -68,7 +68,7 @@
             <li v-if="!authStore.isAuthenticated">
               <router-link
                 to="register"
-                class="text-gray-600 hover:text-blue-600 text-sm transition-colors"
+                class="text-gray-600 hover:text-amber-600 text-sm transition-colors"
               >
                 註冊
               </router-link>
@@ -81,22 +81,22 @@
           <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">支援</h3>
           <ul class="space-y-2">
             <li>
-              <a href="#" class="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+              <a href="#" class="text-gray-600 hover:text-amber-600 text-sm transition-colors">
                 幫助中心
               </a>
             </li>
             <li>
-              <a href="#" class="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+              <a href="#" class="text-gray-600 hover:text-amber-600 text-sm transition-colors">
                 聯絡我們
               </a>
             </li>
             <li>
-              <a href="#" class="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+              <a href="#" class="text-gray-600 hover:text-amber-600 text-sm transition-colors">
                 隱私政策
               </a>
             </li>
             <li>
-              <a href="#" class="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+              <a href="#" class="text-gray-600 hover:text-amber-600 text-sm transition-colors">
                 服務條款
               </a>
             </li>

@@ -24,7 +24,7 @@
       <Button
         v-if="authStore.isAuthenticated"
         @click="$router.push('events/create')"
-        class="bg-blue-600 hover:bg-blue-700 text-white"
+        class="bg-amber-600 hover:bg-amber-700 text-white"
       >
         建立第一個活動
       </Button>
@@ -39,7 +39,7 @@
           <Button
             icon="pi pi-plus"
             label="建立活動"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md"
+            class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-2 rounded-md"
             @click="showCreateDialog = true"
           />
         </div>
@@ -92,7 +92,7 @@
                 <Button
                   label="建立"
                   type="submit"
-                  class="bg-blue-600 text-white"
+                  class="bg-amber-600 text-white"
                   :loading="eventStore.isLoading"
                 />
               </div>
@@ -106,7 +106,7 @@
           >
             <template #header>
               <div
-                class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-t-lg"
+                class="h-48 bg-gradient-to-r from-amber-500 to-purple-600 flex items-center justify-center rounded-t-lg"
               >
                 <i class="pi pi-calendar text-white text-6xl"></i>
               </div>
@@ -135,7 +135,7 @@
               <div class="flex justify-between items-center pt-3">
                 <Button
                   @click.stop="goToEventDetail(event.id)"
-                  class="bg-blue-600 text-white rounded-md px-4 py-2"
+                  class="bg-amber-600 text-white rounded-md px-4 py-2"
                   size="small"
                   variant="outlined"
                   >查看詳情</Button
@@ -172,7 +172,7 @@
         >
           <template #header>
             <div
-              class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-t-lg"
+              class="h-48 bg-gradient-to-br from-amber-200 to-red-400 flex items-center justify-center rounded-t-lg"
             >
               <i class="pi pi-calendar text-white text-6xl"></i>
             </div>
@@ -201,7 +201,7 @@
             <div class="flex justify-between items-center pt-3">
               <Button
                 @click.stop="goToEventDetail(event.id)"
-                class="bg-blue-600 text-white rounded-md px-4 py-2"
+                class="bg-amber-600 text-white rounded-md px-4 py-2"
                 size="small"
                 variant="outlined"
                 >查看詳情</Button

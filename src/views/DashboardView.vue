@@ -9,7 +9,7 @@
 
       <!-- 統計卡片 -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card class="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <Card class="bg-gradient-to-r from-amber-500 to-amber-600 text-white">
           <template #content>
             <div class="flex items-center justify-between">
               <div>

@@ -22,7 +22,7 @@
         <!-- 開始使用按鈕 -->
         <Button
           @click="goToHome"
-          class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+          class="w-full bg-gradient-to-r from-amber-600 to-purple-600 hover:from-amber-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
         >
           <i class="pi pi-arrow-right mr-2"></i>
           開始使用
@@ -35,10 +35,8 @@
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">註冊新帳戶</h2>
         <p class="mt-2 text-center text-sm text-gray-600">
-          或者
-          <router-link to="login" class="font-medium text-blue-600 hover:text-blue-500">
-            登入現有帳戶
-          </router-link>
+          已經有帳戶？
+          <Button label="登入現有帳戶" @click="$router.push('/login')" link class="p-0 h-auto" />
         </p>
       </div>
 
@@ -138,7 +136,7 @@
             type="submit"
             :loading="authStore.isLoading"
             :disabled="!isFormValid"
-            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-tranblue-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            class="w-full bg-gradient-to-r from-amber-600 to-purple-600 hover:from-amber-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:-tranamber-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             <i v-if="!authStore.isLoading" class="pi pi-user-plus mr-2"></i>
             <i v-else class="pi pi-spin pi-spinner mr-2"></i>
@@ -218,6 +216,12 @@ const handleRegister = async () => {
   try {
     await authStore.register({
       name: form.value.name,
+      email: form.value.email,
+      password: form.value.password,
+    })
+
+    // 註冊成功後自動登入
+    await authStore.login({
       email: form.value.email,
       password: form.value.password,
     })

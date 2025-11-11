@@ -5,7 +5,7 @@
         <!-- Logo 和品牌名稱 -->
         <div class="flex items-center">
           <router-link to="/events" class="flex items-center space-x-2">
-            <i class="pi pi-calendar text-2xl text-blue-600"></i>
+            <i class="pi pi-calendar text-2xl text-amber-600"></i>
             <span class="text-xl font-bold text-gray-900">EventApp</span>
           </router-link>
         </div>
@@ -15,8 +15,8 @@
           <div class="flex items-center space-x-8">
             <router-link
               to="/events"
-              class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              :class="{ 'text-blue-600 bg-blue-50': $route.path.startsWith('/events') }"
+              class="text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              :class="{ 'text-amber-600 bg-amber-50': $route.path.startsWith('/events') }"
             >
               瀏覽活動
             </router-link>
@@ -24,8 +24,8 @@
             <template v-if="authStore.isAuthenticated">
               <router-link
                 to="/dashboard"
-                class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                :class="{ 'text-blue-600 bg-blue-50': $route.path === '/dashboard' }"
+                class="text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                :class="{ 'text-amber-600 bg-amber-50': $route.path === '/dashboard' }"
               >
                 我的儀表板
               </router-link>

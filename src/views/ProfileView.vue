@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-md mx-auto my-12 p-8 bg-white rounded-lg shadow">
-    <h2 class="text-2xl font-bold mb-6 text-blue-700">使用者詳細資料</h2>
+    <h2 class="text-2xl font-bold mb-6 text-amber-700">使用者詳細資料</h2>
     <div class="mb-4">
       <label class="block text-gray-600 font-medium mb-1">名稱</label>
       <div class="text-gray-900">{{ user?.name }}</div>

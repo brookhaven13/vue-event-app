@@ -24,10 +24,10 @@
       <div v-else>
         <!-- 統計資訊 -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card class="bg-blue-50">
+          <Card class="bg-amber-50">
             <template #content>
               <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ totalEvents }}</div>
+                <div class="text-2xl font-bold text-amber-600">{{ totalEvents }}</div>
                 <div class="text-sm text-gray-600">總活動數</div>
               </div>
             </template>
@@ -98,7 +98,7 @@
                   >
                     <td class="px-4 py-4">
                       <div class="flex items-center">
-                        <i class="pi pi-calendar text-blue-600 mr-2"></i>
+                        <i class="pi pi-calendar text-amber-600 mr-2"></i>
                         <span class="font-medium text-gray-900">{{ event.name }}</span>
                       </div>
                     </td>

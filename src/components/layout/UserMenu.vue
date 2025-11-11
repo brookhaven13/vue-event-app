@@ -4,7 +4,7 @@
     <div v-if="authStore.isAuthenticated" class="hidden md:block relative">
       <Menu ref="userMenu" :model="userMenuItems" :popup="true" class="w-48" />
       <Button @click="toggleUserMenu" class="p-button-text p-button-plain flex items-center">
-        <div class="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center">
+        <div class="w-7 h-7 bg-green-600 rounded-full flex items-center justify-center">
           <i class="pi pi-user text-white text-xs"></i>
         </div>
         <span class="hidden sm:block text-gray-700 text-sm">{{ authStore.user?.name }}</span>
@@ -14,16 +14,8 @@
 
     <!-- 未登入用戶 - 桌面版 -->
     <div v-else class="hidden md:flex items-center space-x-3">
-      <router-link
-        to="/login"
-        class="border border-blue-600 text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-        >登入</router-link
-      >
-      <router-link
-        to="/register"
-        class="bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-700"
-        >註冊</router-link
-      >
+      <Button label="登入" @click="router.push('/login')" outlined />
+      <Button label="註冊" @click="router.push('/register')" />
     </div>
 
     <!-- 手機版菜單按鈕 -->

@@ -144,7 +144,7 @@
                   label="更新活動"
                   :loading="isUpdating"
                   :disabled="!isFormValid || !hasChanges"
-                  class="bg-blue-600 hover:bg-blue-700"
+                  class="bg-amber-600 hover:bg-amber-700"
                 />
               </div>
             </form>

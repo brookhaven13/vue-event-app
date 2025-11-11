@@ -16,17 +16,17 @@ import router from './router'
 const MyPreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50: '{blue.50}',
-      100: '{blue.100}',
-      200: '{blue.200}',
-      300: '{blue.300}',
-      400: '{blue.400}',
-      500: '{blue.500}',
-      600: '{blue.600}',
-      700: '{blue.700}',
-      800: '{blue.800}',
-      900: '{blue.900}',
-      950: '{blue.950}',
+      50: '{amber.50}',
+      100: '{amber.100}',
+      200: '{amber.200}',
+      300: '{amber.300}',
+      400: '{amber.400}',
+      500: '{amber.500}',
+      600: '{amber.600}',
+      700: '{amber.700}',
+      800: '{amber.800}',
+      900: '{amber.900}',
+      950: '{amber.950}',
     },
     secondary: {
       50: '{slate.50}',

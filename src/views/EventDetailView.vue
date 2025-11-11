@@ -51,7 +51,7 @@
           <Card class="mb-6">
             <template #header>
               <div
-                class="h-64 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-tl-lg rounded-tr-lg"
+                class="h-64 bg-gradient-to-br from-amber-200 to-red-400 flex items-center justify-center rounded-tl-lg rounded-tr-lg"
               >
                 <i class="pi pi-calendar text-white text-8xl"></i>
               </div>
@@ -158,7 +158,7 @@
                   :key="attendee.id"
                   class="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg"
                 >
-                  <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                  <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
                     <i class="pi pi-user text-white text-sm"></i>
                   </div>
                   <div>
