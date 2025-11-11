@@ -4,7 +4,7 @@
     <div v-if="authStore.isAuthenticated" class="hidden md:block relative">
       <Menu ref="userMenu" :model="userMenuItems" :popup="true" class="w-48" />
       <Button @click="toggleUserMenu" class="p-button-text p-button-plain flex items-center">
-        <div class="w-7 h-7 bg-green-600 rounded-full flex items-center justify-center">
+        <div class="w-7 h-7 bg-amber-500 rounded-full flex items-center justify-center">
           <i class="pi pi-user text-white text-xs"></i>
         </div>
         <span class="hidden sm:block text-gray-700 text-sm">{{ authStore.user?.name }}</span>

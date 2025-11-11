@@ -43,7 +43,7 @@
           <router-link
             to="/events"
             @click="isMobileMenuOpen = false"
-            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-white transition-colors"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-amber-600 hover:bg-white transition-colors"
           >
             瀏覽活動
           </router-link>
@@ -52,7 +52,7 @@
             <router-link
               to="dashboard"
               @click="isMobileMenuOpen = false"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-amber-600 hover:bg-white transition-colors"
             >
               我的儀表板
             </router-link>
@@ -60,7 +60,7 @@
             <router-link
               to="events/create"
               @click="isMobileMenuOpen = false"
-              class="block px-3 py-2 rounded-md text-base font-medium text-emerald-600 bg-white"
+              class="block px-3 py-2 rounded-md text-base font-medium text-amber-600 bg-white"
             >
               建立活動
             </router-link>
@@ -80,9 +80,9 @@
               <router-link
                 to="login"
                 @click="isMobileMenuOpen = false"
-                class="block px-3 py-2 rounded-md text-base font-medium border border-emerald-600 text-emerald-600 hover:bg-emerald-50 transition-colors"
+                class="block px-3 py-2 rounded-md text-base font-medium border border-amber-600 text-amber-600 hover:bg-amber-50 transition-colors"
                 :class="{
-                  'border-emerald-600 text-emerald-600 bg-emerald-50': $route.path === '/login',
+                  'border-amber-600 text-amber-600 bg-amber-50': $route.path === '/login',
                 }"
               >
                 登入
@@ -90,8 +90,8 @@
               <router-link
                 to="register"
                 @click="isMobileMenuOpen = false"
-                class="block px-3 py-2 rounded-md text-base font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
-                :class="{ 'bg-emerald-700 text-white': $route.path === '/register' }"
+                class="block px-3 py-2 rounded-md text-base font-medium bg-amber-600 text-white hover:bg-amber-700 transition-colors"
+                :class="{ 'bg-amber-700 text-white': $route.path === '/register' }"
               >
                 註冊
               </router-link>

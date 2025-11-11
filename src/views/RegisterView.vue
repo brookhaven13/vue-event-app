@@ -294,4 +294,13 @@ const goToHome = () => {
   background: #9ca3af !important;
   transform: none !important;
 }
+
+/* 手機版按鈕樣式調整 */
+@media (max-width: 768px) {
+  .p-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+}
 </style>

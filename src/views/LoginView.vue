@@ -15,32 +15,26 @@
           <!-- 電子郵件輸入框 -->
           <div class="space-y-2">
             <label for="email" class="block text-sm font-medium text-gray-700"> 電子郵件 </label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="pi pi-envelope text-gray-400"></i>
-              </div>
+            <IconField>
+              <InputIcon class="pi pi-envelope" />
               <InputText
                 id="email"
                 v-model="form.email"
                 type="email"
                 placeholder="請輸入您的電子郵件"
-                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
-                :class="{ 'border-red-300 focus:ring-red-500 focus:border-red-500': emailError }"
+                class="w-full"
+                :class="{ 'p-invalid': emailError }"
                 required
               />
-            </div>
+            </IconField>
             <small v-if="emailError" class="text-red-600 text-sm">{{ emailError }}</small>
           </div>
 
           <!-- 密碼輸入框 -->
           <div class="space-y-2">
             <label for="password" class="block text-sm font-medium text-gray-700"> 密碼 </label>
-            <div class="relative">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10"
-              >
-                <i class="pi pi-lock text-gray-400"></i>
-              </div>
+            <IconField>
+              <InputIcon class="pi pi-lock" />
               <Password
                 id="password"
                 v-model="form.password"
@@ -48,11 +42,10 @@
                 :feedback="false"
                 toggle-mask
                 class="w-full"
-                input-class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
-                :input-style="{ 'border-color': passwordError ? '#fca5a5' : '' }"
+                :class="{ 'p-invalid': passwordError }"
                 required
               />
-            </div>
+            </IconField>
             <small v-if="passwordError" class="text-red-600 text-sm">{{ passwordError }}</small>
           </div>
         </div>
@@ -89,6 +82,8 @@ import { useAuthStore } from '@/stores/auth'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -180,5 +175,14 @@ const handleLogin = async () => {
 :deep(.p-password .p-inputtext:focus) {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
   border-color: #6366f1;
+}
+
+/* 手機版按鈕樣式調整 */
+@media (max-width: 768px) {
+  .p-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
 }
 </style>

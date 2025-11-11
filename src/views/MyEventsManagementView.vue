@@ -1,6 +1,16 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto">
+      <!-- 返回按鈕 -->
+      <div class="mb-4">
+        <Button
+          @click="$router.push('/dashboard')"
+          icon="pi pi-arrow-left"
+          label="返回"
+          class="p-button-text text-gray-600 hover:text-gray-900"
+        />
+      </div>
+
       <!-- 頁面標題 -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">管理我的活動</h1>

@@ -125,7 +125,7 @@
               <Button
                 v-else-if="!isAttending"
                 @click="joinEvent"
-                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                class="w-full"
                 :loading="joiningEvent"
               >
                 <i class="pi pi-plus mr-2"></i>
@@ -163,7 +163,6 @@
                   </div>
                   <div>
                     <div class="font-medium text-gray-900">{{ attendee.name }}</div>
-                    <div class="text-sm text-gray-600">{{ attendee.email }}</div>
                   </div>
                 </div>
               </div>
@@ -190,7 +189,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useEventStore } from '@/stores/event'
@@ -199,11 +198,14 @@ import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Message from 'primevue/message'
 import ProgressSpinner from 'primevue/progressspinner'
+import { useNotification } from '@/composables/useNotification'
+import axios from 'axios'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const eventStore = useEventStore()
+const { showSuccess, showError } = useNotification()
 
 const deleteDialog = ref(false)
 const joiningEvent = ref(false)
@@ -222,10 +224,20 @@ const attendeeCount = computed(() => {
   return event.value?.attendees?.length || 0
 })
 
-const isAttending = computed(() => {
-  if (!authStore.user || !event.value?.attendees) return false
-  return event.value.attendees.some((attendee) => attendee.id === authStore.user!.id)
-})
+const isAttending = ref(false)
+watch(
+  [() => authStore.user, () => event.value?.attendees],
+  () => {
+    if (!authStore.user || !event.value?.attendees) {
+      isAttending.value = false
+    } else {
+      isAttending.value = event.value.attendees.some(
+        (attendee) => attendee.id === authStore.user!.id,
+      )
+    }
+  },
+  { immediate: true },
+)
 
 onMounted(() => {
   loadEvent()
@@ -234,8 +246,22 @@ onMounted(() => {
 const loadEvent = async () => {
   try {
     await eventStore.fetchEvent(eventId.value)
+    await fetchAttendees()
   } catch (error) {
     console.error('Failed to load event:', error)
+  }
+}
+
+const fetchAttendees = async () => {
+  if (!event.value) return
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/events/${event.value.id}/attendees`,
+    )
+    event.value.attendees = response.data
+  } catch (error) {
+    console.error('Failed to fetch attendees:', error)
+    showError('無法取得參加人數，請稍後再試。')
   }
 }
 
@@ -250,21 +276,38 @@ const confirmDeleteEvent = () => {
 const handleDeleteEvent = async () => {
   try {
     await eventStore.deleteEvent(eventId.value)
-    deleteDialog.value = false
-    router.push('events')
+    showSuccess('活動已刪除')
+    router.push('/events')
   } catch (error) {
     console.error('Failed to delete event:', error)
+    showError('刪除活動失敗，請稍後再試。')
+  } finally {
+    deleteDialog.value = false
   }
 }
 
 const joinEvent = async () => {
-  if (!authStore.user) return
-
+  if (!event.value) return
+  if (!authStore.user) {
+    showError('請先登入以參加活動。')
+    return
+  }
   joiningEvent.value = true
   try {
-    await eventStore.addAttendee(eventId.value, authStore.user.id)
+    await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/events/${event.value.id}/attendees/${authStore.user.id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      },
+    )
+    showSuccess('成功參加活動！')
+    await fetchAttendees()
   } catch (error) {
     console.error('Failed to join event:', error)
+    showError('參加活動失敗，請稍後再試。')
   } finally {
     joiningEvent.value = false
   }
@@ -276,8 +319,11 @@ const leaveEvent = async () => {
   leavingEvent.value = true
   try {
     await eventStore.removeAttendee(eventId.value, authStore.user.id)
+    await fetchAttendees()
+    isAttending.value = false
   } catch (error) {
     console.error('Failed to leave event:', error)
+    showError('取消參加失敗，請稍後再試。')
   } finally {
     leavingEvent.value = false
   }
