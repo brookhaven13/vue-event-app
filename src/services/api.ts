@@ -67,6 +67,12 @@ class ApiClient {
     return response.data
   }
 
+  // 更新使用者資料
+  async updateUser(userData: { name: string; password: string }): Promise<AuthResponse> {
+    const response: AxiosResponse<AuthResponse> = await this.client.put('/auth/user', userData)
+    return response.data
+  }
+
   // 事件相關 API
   async getEvents(): Promise<Event[]> {
     const response = await this.client.get<Event[]>('/events')
