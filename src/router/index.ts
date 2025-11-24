@@ -90,7 +90,9 @@ router.beforeEach((to) => {
 
   // 檢查是否需要認證
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    return { name: 'login' }
+    if (to.name !== 'login') {
+      return { name: 'login' }
+    }
   }
 
   // 檢查是否需要 admin 權限

@@ -119,11 +119,12 @@ const handleLogin = async () => {
       password: form.value.password,
     })
 
-    // 登入成功後導向 event 頁面
+    // 登入成功後導向 event 頁面，使用 router.push 會自動處理 BASE_URL
     router.push('/events')
   } catch (error) {
-    // 錯誤已經在 store 中處理
+    // 顯示錯誤訊息並停留在當前頁面
     console.error('Login failed:', error)
+    authStore.error = '登入失敗，請檢查您的帳號或密碼是否正確'
   }
 }
 </script>

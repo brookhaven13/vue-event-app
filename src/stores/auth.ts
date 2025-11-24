@@ -55,6 +55,11 @@ export const useAuthStore = defineStore('auth', () => {
     } catch (err: unknown) {
       const message = (err as ApiError)?.response?.data?.message || '登入失敗'
       error.value = message
+
+      // 確保登入失敗時清除 token 和 user
+      token.value = null
+      user.value = null
+
       throw err
     } finally {
       isLoading.value = false

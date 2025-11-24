@@ -140,7 +140,6 @@
                           @click="viewEvent(event.id)"
                           icon="pi pi-eye"
                           class="p-button-text p-button-sm"
-                          severity="contrast"
                           v-tooltip.top="'查看詳情'"
                         />
                         <Button
@@ -148,6 +147,7 @@
                           icon="pi pi-pencil"
                           class="p-button-text p-button-sm"
                           v-tooltip.top="'編輯'"
+                          severity="success"
                         />
                         <Button
                           @click="confirmDeleteEvent(event)"

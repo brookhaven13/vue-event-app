@@ -146,6 +146,7 @@
                     icon="pi pi-pencil"
                     class="p-button-text p-button-sm"
                     size="small"
+                    severity="success"
                   />
                   <Button
                     @click.stop="confirmDeleteEvent(event)"
@@ -212,6 +213,7 @@
                   icon="pi pi-pencil"
                   class="p-button-text p-button-sm"
                   size="small"
+                  severity="success"
                 />
                 <Button
                   @click.stop="confirmDeleteEvent(event)"

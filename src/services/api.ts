@@ -9,6 +9,7 @@ import type {
   AuthResponse,
   ApiResponse,
 } from '@/types'
+import router from '@/router' // 引入 Vue Router 實例
 
 class ApiClient {
   private client: AxiosInstance
@@ -41,10 +42,14 @@ class ApiClient {
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
-          // Token 過期或無效，清除本地存儲並跳轉到登入頁
+          // Token 過期或無效，清除本地存儲
           localStorage.removeItem('token')
           localStorage.removeItem('user')
-          window.location.href = '/login'
+
+          // 檢查當前路由是否已經是 /login，避免重複跳轉
+          if (router.currentRoute.value.path !== '/login') {
+            router.push('/login')
+          }
         }
         return Promise.reject(error)
       },

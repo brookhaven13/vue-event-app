@@ -145,12 +145,14 @@
                           icon="pi pi-pencil"
                           class="p-button-text p-button-sm text-amber-600 hover:text-amber-700"
                           v-tooltip.top="'編輯'"
+                          severity="success"
                         />
                         <Button
                           @click="confirmDeleteEvent(event)"
                           icon="pi pi-trash"
                           class="p-button-text p-button-sm text-red-600 hover:text-red-700"
                           v-tooltip.top="'刪除'"
+                          severity="danger"
                         />
                       </div>
                     </td>
