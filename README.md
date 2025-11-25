@@ -1,6 +1,6 @@
 # 🎯 Event Management System
 
-一個功能完整的事件管理系統前端應用，採用現代化技術棧構建，提供直觀的用戶界面和豐富的功能。
+現代化 Vue 3 功能完整的事件管理系統前端應用，採用於管理活動，提供使用者認證、個人化活動儀表板以及流暢的導航體驗。採用 Vue Router、Pinia 和 PrimeVue 打造，提供響應式且優雅的使用者介面。非常適合輕鬆組織、瀏覽和參與活動。
 
 [![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -21,7 +21,7 @@
 ### 環境要求
 
 - Node.js 18+
-- npm 或 yarn
+- npm
 - Go 1.19+ (用於後端 API)
 
 ### 🔧 完整運行步驟
